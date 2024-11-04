@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign Up - Recipe Sharing</title>
+  <title>Sign Up</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Raleway:wght@400;500&display=swap">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="userLogin.css">
+  <link rel="stylesheet" href="userSignUp.css">
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
@@ -101,7 +101,7 @@
       <h2>Sign Up</h2>
       <form id="signupForm">
         <label for="username">Username</label>
-        <input type="text" id="username" name="username" placeholder="Choose a username" required>
+        <input type="text" id="username" name="username" placeholder="Enter a username" required>
 
         <label for="email">Email address</label>
         <input type="email" id="email" name="email" placeholder="Enter your email address" required>
@@ -114,7 +114,7 @@
 
         <div class="terms">
           <input type="checkbox" id="terms" name="terms" required>
-          <label for="terms">I accept the <a href="#">Terms & Conditions</a></label>
+          <label for="terms">&nbspI accept the <a href="#">Terms & Conditions</a></label>
         </div>
         
         <button type="submit">Sign Up</button>

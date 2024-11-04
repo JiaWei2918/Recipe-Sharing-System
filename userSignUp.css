@@ -6,7 +6,7 @@
 }
 
 body {
-  background-image: url('images/login-background.jpeg');
+  background-image: url('images/signup-background.jpg');
   background-size: cover;
   background-position: center;
   display: flex;
@@ -49,6 +49,7 @@ body {
   margin-bottom: 8px;
 }
 
+.auth-box input[type="text"],
 .auth-box input[type="email"],
 .auth-box input[type="password"] {
   width: 100%;
@@ -59,7 +60,7 @@ body {
   font-size: 16px;
 }
 
-.auth-box .forgot-password {
+.auth-box {
   display: block;
   text-align: right;
   font-size: 14px;
@@ -96,6 +97,27 @@ body {
 }
 
 .redirect-text a:hover {
+  text-decoration: underline;
+}
+
+.terms {
+  display: flex;
+  align-items: baseline;
+  margin-top: 10px;
+  margin-bottom: 10px
+}
+
+.terms label {
+  font-size: 16px;
+  color: #555;
+}
+
+.terms a {
+  color: #ff6600;
+  text-decoration: none;
+}
+
+.terms a:hover {
   text-decoration: underline;
 }
 
