@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forgot Password</title>
+    <link rel="stylesheet" href="forgotPass.css">
+</head>
+<body>
+    <div class="container">
+        <div class="forgot-password-box">
+            <h2>Forgot your password?</h2>
+            <p>Submit your email address, and we'll send a link to reset your password.</p>
+            <form action="reset-password.php" method="POST">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email address here" required>
+                <button type="submit" class="submit-button">Submit</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
