@@ -1,129 +1,44 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+body {
   font-family: Arial, sans-serif;
 }
 
-.profile-container {
-  display: flex;
-  padding: 20px;
-  max-width: 1200px;
-  margin: auto;
-}
-
-/* .sidebar {
-  width: 20%;
-} */
-
-.profile-content {
-  width: 80%;
-  padding: 20px;
-}
-
-.profile-header {
-  text-align: center;
-}
-
-.profile-pic {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  margin-bottom: 10px;
-}
-
-.profile-header h2 {
-  font-size: 1.5em;
-  margin: 10px 0;
-}
-
-.profile-header p {
-  color: #777;
-}
-
-.social-icons {
-  margin: 10px 0;
-}
-
-.logout-button {
-  padding: 10px 20px;
-  border: 1px solid #333;
-  background-color: transparent;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-/* Tabs styling */
-.tabs {
-  display: flex;
-  justify-content: center;
-  margin: 20px 0;
-}
-
-.tab {
-  padding: 10px 20px;
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  margin: 0 10px;
-}
-
-.tab.active {
-  border-bottom: 2px solid teal;
+.profile-title {
   font-weight: bold;
+  text-align: left;
 }
 
-/* Search bar styling */
-.search-bar {
-  display: flex;
-  justify-content: center;
-  margin: 20px 0;
+.profile-description {
+  font-size: 1em;
 }
 
-.search-bar input {
-  width: 80%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 20px;
+.nav-item {
+  font-size: 15px;
 }
 
-/* Annotation */
-.annotation {
-  text-align: center;
-  color: #777;
-  margin: 20px 0;
+.nav-tabs .nav-link.active {
+  background-color: #d6eaf8;
+  color: #21618c;
+  font-weight: 800;
 }
 
-/* Saved Recipes section */
-.saved-recipes {
-  margin: 20px 0;
+.card {
+  border: none;
+  transition: transform 0.3s ease;
 }
 
-.saved-recipes h3 {
-  font-size: 1.2em;
-  color: #333;
-  margin-bottom: 10px;
+.card:hover {
+  transform: scale(1.05);
 }
 
-.saved-recipes p {
-  color: #777;
+.card-title {
+  font-size: 1.1em;
+  font-weight: 500;
 }
 
-/* Responsive design for mobile view */
-@media (max-width: 768px) {
-  .profile-container {
-      flex-direction: column;
-  }
+.container img.rounded-circle {
+  border: 3px solid #007bff;
+}
 
-  .sidebar {
-      width: 100%;
-  }
-
-  .profile-content {
-      width: 100%;
-      padding: 10px;
-  }
-
-  .search-bar input {
-      width: 90%;
-  }
+.d-flex .btn-primary {
+  font-weight: 600;
 }
