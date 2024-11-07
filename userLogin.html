@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Raleway:wght@400;500&display=swap">
+    <link rel="stylesheet" href="https://fonts.bunny.net/css?family=lora:400,400i,700,700i|playfair-display:400,700|poppins:400|roboto-condensed:400,700">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="userLogin.css">
+    <link rel="stylesheet" href="sidebar.css">
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
@@ -66,6 +68,8 @@
     </script>
 </head>
 <body>
+    <div id="sidebar-placeholder"></div>
+
     <div class="login-container">
         <div class="login-box">
             <h2>Log In</h2>
@@ -89,5 +93,24 @@
             <div id="customAlert" style="display: none;"></div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch("sidebar.html")
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("sidebar-placeholder").innerHTML = data;
+
+                    const currentPage = window.location.pathname.split('/').pop();
+                    const links = document.querySelectorAll('.customNav-link');
+                    
+                    links.forEach(link => {
+                        if (link.getAttribute('href') === currentPage) {
+                            link.classList.add('active');
+                        }
+                    });
+                });
+        });
+    </script>
 </body>
 </html>
