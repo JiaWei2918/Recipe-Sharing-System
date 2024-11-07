@@ -4,23 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
+    <link rel="stylesheet" href="https://fonts.bunny.net/css?family=lora:400,400i,700,700i|playfair-display:400,700|poppins:400|roboto-condensed:400,700">
     <link rel="stylesheet" href="homePage.css">
+    <link rel="stylesheet" href="sidebar.css">
 </head>
 <body>
-    <nav class="sidebar">
-        <img src="images/Logo.png" alt="Logo" class="sidebar-logo">
-        <a href="homepage.html">Home</a>
-        <a href="recipeBrowse.html">Recipe Browse</a>
-    </nav>
-</body>
+    <div id="sidebar-placeholder"></div>
 
-<script>
-    const currentPage = window.location.pathname.split('/').pop();
-    const links = document.querySelectorAll('.sidebar a');
-    links.forEach(link => {
-        if (link.getAttribute('href') === currentPage) {
-            link.classList.add('active');
-        }
-    });
-</script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch("sidebar.html")
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("sidebar-placeholder").innerHTML = data;
+
+                    const currentPage = window.location.pathname.split('/').pop();
+                    const links = document.querySelectorAll('.customNav-right a');
+                    
+                    links.forEach(link => {
+                        if (link.getAttribute('href') === currentPage) {
+                            link.classList.add('active');
+                        }
+                    });
+                });
+        });
+    </script>
+</body>
 </html>

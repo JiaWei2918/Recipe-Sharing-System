@@ -100,6 +100,15 @@
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById("sidebar-placeholder").innerHTML = data;
+
+                    const currentPage = window.location.pathname.split('/').pop();
+                    const links = document.querySelectorAll('.customNav-link');
+                    
+                    links.forEach(link => {
+                        if (link.getAttribute('href') === currentPage) {
+                            link.classList.add('active');
+                        }
+                    });
                 });
         });
     </script>

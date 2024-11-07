@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
+     // Update profile image based on login status
     const profileImage = document.getElementById("profileImage");
 
     // Mock data for example purposes. Replace with actual login status check.
