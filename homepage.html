@@ -3,13 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RecipeShare - Home</title>
-    <link rel="stylesheet" href="homepage.css">
+    <title>Home</title>
+    <link rel="stylesheet" href="homePage.css">
 </head>
 <body>
-    <header>
-        <h1>RecipeShare</h1>
-        <p>Welcome to RecipeShare! Discover and share delicious recipes.</p>
-    </header>
+    <nav class="sidebar">
+        <img src="images/Logo.png" alt="Logo" class="sidebar-logo">
+        <a href="homepage.html">Home</a>
+        <a href="recipeBrowse.html">Recipe Browse</a>
+    </nav>
 </body>
+
+<script>
+    const currentPage = window.location.pathname.split('/').pop();
+    const links = document.querySelectorAll('.sidebar a');
+    links.forEach(link => {
+        if (link.getAttribute('href') === currentPage) {
+            link.classList.add('active');
+        }
+    });
+</script>
 </html>
