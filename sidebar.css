@@ -91,6 +91,7 @@
     height: 60px;
     width: 150px;
     margin: 0 auto;
+    margin-left: 100px;
 }
 
 .customNav-right a {
