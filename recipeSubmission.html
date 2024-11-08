@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Submission</title>
+    <link rel="stylesheet" href="recipeSubmission.css">
+    <link rel="stylesheet" href="sidebar.css">
+</head>
+<body>
+    <div id="sidebar-placeholder"></div>
+    <div class="background">
+        <div class="message">Share your favorite recipes with our community.</div>
+        <div class="form-container">
+            <h2>Submit Your Recipe</h2>
+            <form id="recipeForm" enctype="multipart/form-data">
+                <label for="title">Recipe Title:</label>
+                <input type="text" id="title" name="title" required>
+
+                <label for="ingredients">Ingredients (one per line):</label>
+                <textarea id="ingredients" name="ingredients" rows="5" required></textarea>
+
+                <label for="steps">Preparation Steps:</label>
+                <textarea id="steps" name="steps" rows="7" required></textarea>
+
+                <label for="prepTime">Preparation Time (in minutes):</label>
+                <input type="number" id="prepTime" name="prepTime" min="1" required>
+
+                <label for="image">Upload an Image:</label>
+                <input type="file" id="image" name="image" accept="image/*">
+
+                <button type="submit">Submit Recipe</button>
+            </form>
+            <div id="alertBox" style="display:none;"></div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch("sidebar.html")
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("sidebar-placeholder").innerHTML = data;
+                    const currentPage = window.location.pathname.split('/').pop();
+                    const links = document.querySelectorAll('.customNav-right a');
+                    links.forEach(link => {
+                        if (link.getAttribute('href') === currentPage) {
+                            link.classList.add('active');
+                        }
+                    });
+                });
+        });
+    </script>
+</body>
+</html>
