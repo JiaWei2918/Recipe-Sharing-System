@@ -1,4 +1,5 @@
 /* General Styling */
+
 body {
   background: url('checkered-background.png'); /* Apply checkered pattern */
   font-family: Arial, sans-serif;
@@ -107,4 +108,5 @@ body {
 .recipe-info .ingredients {
   font-size: 0.85em;
   color: #555;
+
 }

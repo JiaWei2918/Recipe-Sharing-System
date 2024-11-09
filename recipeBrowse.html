@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Browse Recipes | RecipeShare</title>
+    <title>Browse Recipes</title>
+    <link rel="stylesheet" href="https://fonts.bunny.net/css?family=lora:400,400i,700,700i|playfair-display:400,700|poppins:400|roboto-condensed:400,700">
     <link rel="stylesheet" href="recipeBrowse.css">
+    <link rel="stylesheet" href="sidebar.css">
 </head>
 <body>
     <!-- Top Navigation Bar -->
@@ -82,5 +84,25 @@
             </div>
         </div>
     </div>
+    <div id="sidebar-placeholder"></div>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch("sidebar.html")
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("sidebar-placeholder").innerHTML = data;
+
+                    const currentPage = window.location.pathname.split('/').pop();
+                    const links = document.querySelectorAll('.customNav-right a');
+                    
+                    links.forEach(link => {
+                        if (link.getAttribute('href') === currentPage) {
+                            link.classList.add('active');
+                        }
+                    });
+                });
+        });
+    </script>
 </body>
 </html>
