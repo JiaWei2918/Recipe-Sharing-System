@@ -21,6 +21,7 @@ body {
   max-width: 800px;
   width: 100%;
   overflow: hidden;
+  margin-top: 20%;
 }
 
 .recipe-image img {
