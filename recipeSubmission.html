@@ -15,17 +15,33 @@
         <div class="form-container">
             <h2>Submit Your Recipe</h2>
             <form id="recipeForm" enctype="multipart/form-data">
+
                 <label for="title">Recipe Title:</label>
                 <input type="text" id="title" name="title" required>
+
+                <label for="category">Category:</label>
+                <input type="text" id="category" name="category" required>
+
+                <label for="source">Source:</label>
+                <input type="text" id="source" name="source" required>
+
+                <label for="rating(1-5)">Rating:</label>
+                <input type="number" id="rating" name="rating" min="1" max="5" required>
 
                 <label for="ingredients">Ingredients (one per line):</label>
                 <textarea id="ingredients" name="ingredients" rows="5" required></textarea>
 
-                <label for="steps">Preparation Steps:</label>
-                <textarea id="steps" name="steps" rows="7" required></textarea>
+                <label for="prepTotal">Total Preparation Time (in minutes):</label>
+                <input type="number" id="prepTotal" name="prepTotal" min="1" required>
 
                 <label for="prepTime">Preparation Time (in minutes):</label>
                 <input type="number" id="prepTime" name="prepTime" min="1" required>
+
+                <label for="cookTime">Cooking Time (in minutes):</label>
+                <input type="number" id="cookTime" name="cookTime" min="1" required>
+
+                <label for="steps">Preparation Steps:</label>
+                <textarea id="steps" name="steps" rows="7" required></textarea>
 
                 <label for="image">Upload an Image:</label>
                 <input type="file" id="image" name="image" accept="image/*">
@@ -35,6 +51,74 @@
             <div id="alertBox" style="display:none;"></div>
         </div>
     </div>
+    <script>
+        document.getElementById('recipeForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const title = document.getElementById('title').value;
+            const category = document.getElementById('category').value;
+            const source = document.getElementById('source').value;
+            const rating = document.getElementById('rating').value;
+            const ingredients = document.getElementById('ingredients').value.split('\n');
+            const prepTotal = document.getElementById('prepTotal').value;
+            const prepTime = document.getElementById('prepTime').value;
+            const cookTime = document.getElementById('cookTime').value;
+            const steps = document.getElementById('steps').value;
+            const imageFile = document.getElementById('image').files[0];
+
+            let imageBase64 = '';
+            if (imageFile) {
+                const reader = new FileReader();
+                reader.onloadend = function() {
+                    imageBase64 = reader.result;
+
+                    const newRecipe = {
+                        title: title,
+                        category: category,
+                        source: source,
+                        rating: rating,
+                        ingredients: ingredients,
+                        prepTotal: prepTotal,
+                        prepTime: prepTime,
+                        cookTime: cookTime,
+                        steps: steps,
+                        imageBase64: imageBase64
+                    };
+
+                    let recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+
+                    recipes.push(newRecipe);
+
+                    localStorage.setItem('recipes', JSON.stringify(recipes));
+
+                    window.location.href = 'recipeBrowse.html';
+                };
+
+                reader.readAsDataURL(imageFile);
+            } else {
+                const newRecipe = {
+                    title: title,
+                    category: category,
+                    source: source,
+                    rating: rating,
+                    ingredients: ingredients,
+                    prepTotal: prepTotal,
+                    prepTime: prepTime,
+                    cookTime: cookTime,
+                    steps: steps,
+                    imageBase64: ''
+                };
+
+                let recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+
+                recipes.push(newRecipe);
+
+                localStorage.setItem('recipes', JSON.stringify(recipes));
+
+                window.location.href = 'recipeBrowse.html';
+            }
+        });
+    </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             fetch("sidebar.html")

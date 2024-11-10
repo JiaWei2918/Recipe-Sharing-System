@@ -80,6 +80,62 @@
             </div>
         </div>
     </div>
+
+    <div class="recipe-list" id="recipeList"></div>
+
+    <script>
+        function loadRecipes() {
+            const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+            const recipeListContainer = document.getElementById('recipeList');
+
+            recipeListContainer.innerHTML = '';
+
+            recipes.forEach(recipe => {
+
+                const recipeCard = document.createElement('div');
+                recipeCard.classList.add('recipe-card');
+
+                const recipeImage = document.createElement('img');
+                recipeImage.src = recipe.imageBase64 || 'default-image.jpg';
+                recipeImage.alt = recipe.title;
+
+                const recipeInfo = document.createElement('div');
+                recipeInfo.classList.add('recipe-info');
+
+                const recipeTitle = document.createElement('h2');
+                recipeTitle.textContent = recipe.title;
+
+                const recipeCategory = document.createElement('p');
+                recipeCategory.classList.add('category');
+                recipeCategory.textContent = 'Category: ' + (recipe.category || 'N/A');
+
+                const recipeSource = document.createElement('p');
+                recipeSource.classList.add('source');
+                recipeSource.textContent = 'From: ' + (recipe.source || 'N/A');
+
+                const recipeRating = document.createElement('div');
+                recipeRating.classList.add('rating');
+                recipeRating.textContent = 'Rating: ' + (recipe.rating || 'N/A');
+
+                const recipeIngredients = document.createElement('p');
+                recipeIngredients.classList.add('ingredients');
+                recipeIngredients.textContent = 'Ingredients: ' + (recipe.ingredients.join(', ') || 'N/A');
+
+                recipeInfo.appendChild(recipeTitle);
+                recipeInfo.appendChild(recipeCategory);
+                recipeInfo.appendChild(recipeSource);
+                recipeInfo.appendChild(recipeRating);
+                recipeInfo.appendChild(recipeIngredients);
+
+                recipeCard.appendChild(recipeImage);
+                recipeCard.appendChild(recipeInfo);
+
+                recipeListContainer.appendChild(recipeCard);
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", loadRecipes);
+    </script>
     
     <script>
         document.addEventListener("DOMContentLoaded", function() {
