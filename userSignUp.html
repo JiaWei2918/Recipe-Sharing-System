@@ -56,10 +56,13 @@
           const userCredential = await createUserWithEmailAndPassword(auth, email, password);
           const user = userCredential.user;
 
+          const defaultPhotoURL = "images/usernotlogin.JPG";
+
           await addDoc(collection(db, "users"), {
             uid: user.uid,
             username: username,
             email: email,
+            photoURL: defaultPhotoURL,
             createdAt: serverTimestamp()
           });
 
