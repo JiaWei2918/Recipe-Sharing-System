@@ -31,9 +31,6 @@
                 <label for="source">Source (from: )</label>
                 <input type="text" id="source" name="source" required>
 
-                <label for="rating">Rating(1-5):</label>
-                <input type="number" id="rating" name="rating" min="1" max="5" required>
-
                 <label for="ingredients">Ingredients (one per line):</label>
                 <textarea id="ingredients" name="ingredients" rows="5" required></textarea>
 
@@ -146,7 +143,6 @@
                 title: recipeForm.title.value,
                 category: recipeForm.category.value,
                 source: recipeForm.source.value,
-                rating: parseInt(recipeForm.rating.value),
                 ingredients: recipeForm.ingredients.value.split("\n"),
                 prepTotal: parseInt(recipeForm.prepTotal.value),
                 prepTime: parseInt(recipeForm.prepTime.value),
