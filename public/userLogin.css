@@ -123,12 +123,15 @@ body {
 
 #customAlert.error {
   background-color: #f44336;
+  color: white;
 }
 
 #customAlert.warning {
   background-color: #FFFF00;
+  color: white;
 }
 
 #customAlert.success {
   background-color: #4CAF50;
+  color: white;
 }
