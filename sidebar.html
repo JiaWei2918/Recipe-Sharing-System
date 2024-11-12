@@ -1,14 +1,15 @@
 <nav class="custom-navbar">
     <div class="customNav-left">
         <div class="user-profile">
-            <img id="profileImage" src="images/usernotlogin.JPG" alt="User Profile" />
+            <img id="profileImage" src="public/images/usernotlogin.JPG" alt="User Profile" />
         </div>
-        <a href="userLogin.html" class="customNav-link">Log in</a>
-        <a href="userSignUp.html" class="customNav-link">Sign up</a>
-        <a href="recipeBrowse.html" class="customNav-link">Submit</a>
+        <a href="userLogin.html" id="loginLink" class="customNav-link">Log in</a>
+        <a href="userProfile.html" id="profileLink" class="customNav-link" style="display: none;">My Profile</a>
+        <a href="homepage.html" id="logoutLink" class="customNav-link" style="display: none;">Log out</a>
+        <a href="userSignUp.html" id="signUpLink" class="customNav-link">Sign up</a>
     </div>
     <a href="homepage.html" class="logo">
-        <img src="images/Logo.png" alt="Logo" class="customNav-logo" />
+        <img src="public/images/Logo.png" alt="Logo" class="customNav-logo" />
     </a>
     <div class="customNav-right">
         <a href="homepage.html">Home</a>
@@ -16,5 +17,3 @@
         <a href="recipeSubmission.html">Recipe Submission</a>
     </div>
 </nav>
-
-<script src="sidebar.js"></script>

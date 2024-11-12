@@ -1,0 +1,81 @@
+body {
+  font-family: 'Lora', serif;
+  background-color: #f9f9f9;
+}
+
+.profile-title {
+  font-weight: bold;
+  text-align: left;
+  color: #21618c;
+}
+
+.profile-description {
+  font-size: 1em;
+  color: #555;
+}
+
+.nav-item {
+  font-size: 15px;
+}
+
+.nav-tabs .nav-link.active {
+  background-color: #d6eaf8;
+  color: #21618c;
+  font-weight: 800;
+  border-radius: 5px;
+}
+
+.nav-tabs .nav-link {
+  color: #333;
+}
+
+.card {
+  border: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.card-title {
+  font-size: 1.1em;
+  font-weight: 500;
+}
+
+.container img.rounded-circle {
+  border: 3px solid #007bff;
+}
+
+.d-flex .btn-primary {
+  font-weight: 600;
+}
+
+#profileEdit textarea.profile-description {
+  font-size: 1em;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+#profileView img.rounded-circle {
+  border: 3px solid #007bff;
+  transition: border-color 0.3s ease;
+}
+
+#profileView img.rounded-circle:hover {
+  border-color: #0056b3;
+}
+
+.pagination .page-link {
+  color: #21618c;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #21618c;
+  border-color: #21618c;
+  color: #fff;
+}
