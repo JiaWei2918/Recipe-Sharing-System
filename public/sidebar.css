@@ -118,25 +118,3 @@
     color: blue;
     border-bottom: 4px solid blue;
 }
-
-/* .search-bar {
-    display: flex;
-    align-items: center;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    overflow: hidden;
-}
-
-.search-bar input {
-    padding: 8px;
-    border: none;
-    outline: none;
-} */
-
-/* .search-bar button {
-    background-color: transparent;
-    border: none;
-    padding: 8px;
-    cursor: pointer;
-    color: #333;
-} */

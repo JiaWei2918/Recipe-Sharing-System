@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recipe Details | RecipeShare</title>
+    <title>Recipe Details</title>
     <link rel="stylesheet" href="https://fonts.bunny.net/css?family=lora:400,400i,700,700i|playfair-display:400,700|poppins:400|roboto-condensed:400,700">
     <link rel="stylesheet" href="public/recipeDetails.css">
     <link rel="stylesheet" href="public/sidebar.css">
@@ -58,23 +58,6 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            fetch("sidebar.html")
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById("sidebar-placeholder").innerHTML = data;
-
-                    const currentPage = window.location.pathname.split('/').pop();
-                    const links = document.querySelectorAll('.customNav-right a');
-                    
-                    links.forEach(link => {
-                        if (link.getAttribute('href') === currentPage) {
-                            link.classList.add('active');
-                        }
-                    });
-                });
-        });
-    </script>
+    <script type="module" src="public/sidebar.js"></script>
 </body>
 </html>

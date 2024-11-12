@@ -34,7 +34,7 @@ body {
 }
 
 .signup-box h2 {
-  font-family: 'Playfair Display', serif;
+  font-family: "Pacifico", cursive;
   font-weight: 800;
   font-size: 28px;
   color: #333;
@@ -66,6 +66,11 @@ body {
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 15px;
+  font-style: italic;
+}
+
+.signup-box input[type="checkbox"] {
+  cursor: pointer;
 }
 
 .signup-box button {
@@ -87,6 +92,7 @@ body {
 .signup-box .redirect-text {
   margin-top: 20px;
   font-size: 14px;
+  font-weight: 800;
   color: #555;
 }
 
@@ -121,6 +127,23 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+#profilePhotoBtn {
+  width: 50%;
+  padding: 12px;
+  background-color: #a569bd;
+  border: none;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 20px;
+  cursor: pointer;
+  font-family: "Orbitron", sans-serif;
+  font-weight: 700;
+}
+
+#profilePhotoBtn:hover {
+  background-color: #bb8fce;
+}
+
 .photo-selection-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
@@ -144,7 +167,8 @@ body {
   border-radius: 50%;
   border: 2px solid #ccc;
   object-fit: cover;
-  margin-top: 10px;
+  margin-top: 8px;
+  margin-bottom: 10px;
 }
 
 .photo-selection-grid img:hover {
@@ -179,6 +203,7 @@ body {
   font-size: 16px;
   font-weight: normal;
   color: #555;
+  font-weight: 800;
 }
 
 .terms a {
@@ -188,6 +213,27 @@ body {
 
 .terms a:hover {
   text-decoration: underline;
+}
+
+.scroll-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 5%;
+  height: 10%;
+  cursor: pointer;
+  border-radius: 50%;
+  box-shadow: 0 9px #f4b400;
+  background-color: white;
+}
+
+.scroll-to-top:hover {
+  opacity: 0.8;
+}
+
+.scroll-to-top:active {
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
 }
 
 #customAlert {

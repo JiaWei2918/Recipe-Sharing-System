@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Raleway:wght@400;500&display=swap">
-    <link rel="stylesheet" href="https://fonts.bunny.net/css?family=lora:400,400i,700,700i|playfair-display:400,700|poppins:400|roboto-condensed:400,700">
+    <link rel="stylesheet" href="https://fonts.bunny.net/css?family=lora:400,400i,700,700i|playfair-display:400,700|Pacifico: 400&display=swap|roboto-condensed:400,700">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="public/userLogin.css">
     <link rel="stylesheet" href="public/sidebar.css">
@@ -31,9 +31,15 @@
                     alertBox.style.display = 'block';
             
                     setTimeout(() => {
-                        window.location.href = "homepage.html";
-                    }, 1000);
+                        const loaderOverlay = document.getElementById('loaderOverlay');
+                        loaderOverlay.style.display = 'flex';
+
+                        setTimeout(() => {
+                            window.location.href = "homepage.html";
+                        }, 2000);
+                    }, 1500); 
                 } catch (e) {
+                    console.error("Firebase Authentication Error: ", e);
                     if (e.code === 'auth/user-not-found') {
                         alertBox.textContent = "No user found with this email. Please sign up first.";
                     } else if (e.code === 'auth/wrong-password') {
@@ -47,7 +53,7 @@
 
                     setTimeout(() => {
                         alertBox.style.display = 'none';
-                    }, 3000);
+                    }, 5000);
                 }
             });
         });
@@ -58,7 +64,7 @@
 
     <div class="login-container">
         <div class="login-box">
-            <h2>Log In</h2>
+            <h2>Login</h2>
             <form id="loginForm">
                 <label for="email">
                     <i class="fa fa-envelope-o" aria-hidden="true"></i> Email Address
@@ -77,6 +83,9 @@
                 <p class="redirect-text">Don't have an account? <a href="userSignUp.html">Sign Up</a>.</p>
             </form>
             <div id="customAlert" style="display: none;"></div>
+            <div id="loaderOverlay" class="loader-overlay" style="display: none;">
+                <div class="loader"></div>
+            </div>
         </div>
     </div>
 
