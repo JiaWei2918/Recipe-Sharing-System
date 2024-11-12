@@ -23,7 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
                             if (!querySnapshot.empty) {
                                 const userData = querySnapshot.docs[0].data();
                                 const photoURL = userData.photoURL || "public/images/usernotlogin.JPG";
-                                console.log("User photoURL:", photoURL);
                                 profileImage.src = photoURL;
                             } else {
                                 console.log("No matching user document found.");
@@ -36,6 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             signUpLink.style.display = "none";
                         } catch (error) {
                             console.error("Error fetching user document:", error);
+                            alert("An error occurred while retrieving your profile information. Please try again later.");
                         }
                     } else {
                         profileImage.src = "public/images/usernotlogin.JPG";
@@ -45,8 +45,6 @@ document.addEventListener("DOMContentLoaded", function () {
                         signUpLink.style.display = "block";
                     }
                 });
-
-                console.log("Setting up logout button listener...");
 
                 if (logoutLink) {
                     logoutLink.addEventListener("click", function (event) {
@@ -58,18 +56,20 @@ document.addEventListener("DOMContentLoaded", function () {
                             })
                             .catch((error) => {
                                 console.error("Error signing out:", error);
+                                alert("An error occurred while signing out. Please try again.");
                             });
                     });
                 }
             } else {
                 console.error("One or more elements not found in the sidebar.");
+                alert("There was an error loading the sidebar. Please refresh the page.");
             }
 
             const currentPage = window.location.pathname.split('/').pop();
             let links = null;
 
             if (currentPage) {
-                if (["homepage.html", "recipeBrowser.html", "recipeSubmission.html"].includes(currentPage)) {
+                if (["homepage.html", "recipeBrowse.html", "recipeSubmission.html"].includes(currentPage)) {
                     links = document.querySelectorAll('.customNav-right a');
                 } else if (["userLogin.html", "userSignUp.html", "userProfile.html"].includes(currentPage)) {
                     links = document.querySelectorAll('.customNav-link');
@@ -85,5 +85,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                 });
             }
+        })
+        .catch(error => {
+            console.error("Error loading sidebar:", error);
+            alert("An error occurred while loading the sidebar. Please try refreshing the page.");
         });
 });

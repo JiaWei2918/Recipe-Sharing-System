@@ -48,7 +48,7 @@
         </div>
 
         <div class="recipe-card">
-            <img src="images/spaghetti.jpg" alt="Spaghetti Carbonara">
+            <img src="public/images/spaghetti.jpg" alt="Spaghetti Carbonara">
             <div class="recipe-info">
                 <h2>Spaghetti Carbonara</h2>
                 <p class="category">Main</p>
@@ -59,7 +59,7 @@
         </div>
 
         <div class="recipe-card">
-            <img src="images/grilled-cheese.jpg" alt="Grilled Cheese">
+            <img src="public/images/grilled-cheese.jpg" alt="Grilled Cheese">
             <div class="recipe-info">
                 <h2>Grilled Cheese</h2>
                 <p class="category">Snack</p>
@@ -70,7 +70,7 @@
         </div>
         
         <div class="recipe-card">
-            <img src="images/caesar-salad.jpg" alt="Caesar Salad">
+            <img src="public/images/caesar-salad.jpg" alt="Caesar Salad">
             <div class="recipe-info">
                 <h2>Caesar Salad</h2>
                 <p class="category">Side</p>
@@ -80,24 +80,7 @@
             </div>
         </div>
     </div>
-    
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            fetch("sidebar.html")
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById("sidebar-placeholder").innerHTML = data;
 
-                    const currentPage = window.location.pathname.split('/').pop();
-                    const links = document.querySelectorAll('.customNav-right a');
-                    
-                    links.forEach(link => {
-                        if (link.getAttribute('href') === currentPage) {
-                            link.classList.add('active');
-                        }
-                    });
-                });
-        });
-    </script>
+    <script type="module" src="public/sidebar.js"></script>
 </body>
 </html>
