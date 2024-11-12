@@ -14,42 +14,153 @@
         <div class="message">Share your favorite recipes with our community.</div>
         <div class="form-container">
             <h2>Submit Your Recipe</h2>
-            <form id="recipeForm" enctype="multipart/form-data">
+            <form id="recipeForm">
                 <label for="title">Recipe Title:</label>
                 <input type="text" id="title" name="title" required>
+
+                <label for="category">Category:</label>
+                <div class="custom-select">
+                    <select id="category" name="category" required>
+                        <option value="main">Main</option>
+                        <option value="dessert">Dessert</option>
+                        <option value="side">Side</option>
+                        <option value="snack">Snack</option>
+                    </select>
+                </div>
+
+                <label for="source">Source (from: )</label>
+                <input type="text" id="source" name="source" required>
+
+                <label for="rating">Rating(1-5):</label>
+                <input type="number" id="rating" name="rating" min="1" max="5" required>
 
                 <label for="ingredients">Ingredients (one per line):</label>
                 <textarea id="ingredients" name="ingredients" rows="5" required></textarea>
 
-                <label for="steps">Preparation Steps:</label>
-                <textarea id="steps" name="steps" rows="7" required></textarea>
+                <label for="prepTotal">Total Preparation Time (in minutes):</label>
+                <input type="number" id="prepTotal" name="prepTotal" min="1" required>
 
                 <label for="prepTime">Preparation Time (in minutes):</label>
                 <input type="number" id="prepTime" name="prepTime" min="1" required>
 
-                <label for="image">Upload an Image:</label>
-                <input type="file" id="image" name="image" accept="image/*">
+                <label for="cookTime">Cooking Time (in minutes):</label>
+                <input type="number" id="cookTime" name="cookTime" min="1" required>
+
+                <label for="steps">Preparation Steps:</label>
+                <textarea id="steps" name="steps" rows="7" required></textarea>
+
+                <label for="image">Choose an Image:</label>
+                <button type="button" id="chooseImageButton">Select an Image</button>
+
+                <input type="hidden" id="selectedImagePath" name="imagePath">
+                
+                <div id="imagePreviewContainer">
+                    <img id="imagePreview" src="" alt="Selected Image Preview" style="display:none;">
+                </div>
 
                 <button type="submit">Submit Recipe</button>
             </form>
             <div id="alertBox" style="display:none;"></div>
         </div>
+
+        <div id="imageModal">
+            <div id="imageModalContent">
+                <h3>Select an Image</h3>
+                <div id="imageGallery">
+                    <img src="public/images/apple-pie.jpg" alt="apple-pie.jpg">
+                    <img src="public/images/fish-and-chips.jpg" alt="fish-and-chips.jpg">
+                    <img src="public/images/spaghetti.jpg" alt="spaghetti.jpg">
+                    <img src="public/images/grilled-cheese.jpg" alt="grilled-cheese.jpg">
+                    <img src="public/images/caesar-salad.jpg" alt="caesar-salad.jpg">
+                </div>
+            </div>
+        </div>
     </div>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            fetch("sidebar.html")
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById("sidebar-placeholder").innerHTML = data;
-                    const currentPage = window.location.pathname.split('/').pop();
-                    const links = document.querySelectorAll('.customNav-right a');
-                    links.forEach(link => {
-                        if (link.getAttribute('href') === currentPage) {
-                            link.classList.add('active');
-                        }
-                    });
-                });
+
+    <script type="module">
+        import { db, collection, addDoc, serverTimestamp } from "/public/firebaseInit.js";
+    
+        const chooseImageButton = document.getElementById("chooseImageButton");
+        const imageModal = document.getElementById("imageModal");
+        const imagePreview = document.getElementById("imagePreview");
+        const selectedImagePath = document.getElementById("selectedImagePath");
+        const imageGallery = document.getElementById("imageGallery");
+        const recipeForm = document.getElementById("recipeForm");
+    
+        chooseImageButton.addEventListener("click", () => {
+            imageModal.style.display = "block";
+        });
+    
+        imageGallery.addEventListener("click", (event) => {
+            if (event.target.tagName === "IMG") {
+
+                document.querySelectorAll("#imageGallery img").forEach(img => img.classList.remove("selected"));
+                
+                event.target.classList.add("selected");
+
+                const fullPath = event.target.src;
+                const imageName = fullPath.substring(fullPath.lastIndexOf('/') + 1);
+                const relativePath = `public/images/${imageName}`;
+                selectedImagePath.value = relativePath;
+
+                imagePreview.src = fullPath;
+                imagePreview.style.display = "block";
+
+                imageModal.style.display = "none";
+            }
+        });
+    
+        window.onclick = function(event) {
+            if (event.target === imageModal) {
+                imageModal.style.display = "none";
+            }
+        };
+    
+        recipeForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+    
+            const formData = {
+                title: recipeForm.title.value,
+                category: recipeForm.category.value,
+                source: recipeForm.source.value,
+                rating: parseInt(recipeForm.rating.value),
+                ingredients: recipeForm.ingredients.value.split("\n"),
+                prepTotal: parseInt(recipeForm.prepTotal.value),
+                prepTime: parseInt(recipeForm.prepTime.value),
+                cookTime: parseInt(recipeForm.cookTime.value),
+                steps: recipeForm.steps.value,
+                image: selectedImagePath.value,
+                created: serverTimestamp(),
+            };
+    
+            try {
+                await addDoc(collection(db, "recipes"), formData);
+                alert("Recipe submitted successfully!");
+                recipeForm.reset();
+                imagePreview.style.display = "none";
+            } catch (error) {
+                alert("Error submitting recipe: " + error);
+            }
         });
     </script>
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+          fetch("sidebar.html")
+            .then(response => response.text())
+            .then(data => {
+              document.getElementById("sidebar-placeholder").innerHTML = data;
+    
+              const currentPage = window.location.pathname.split('/').pop();
+              const links = document.querySelectorAll('.customNav-link');
+              
+              links.forEach(link => {
+                if (link.getAttribute('href') === currentPage) {
+                  link.classList.add('active');
+                }
+              });
+            });
+        });
+      </script>
+    
 </body>
 </html>
