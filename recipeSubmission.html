@@ -79,7 +79,7 @@
     </div>
 
     <script type="module">
-        import { db, collection, addDoc, serverTimestamp } from "/public/firebaseInit.js";
+        import { auth, db, collection, addDoc, serverTimestamp } from "/public/firebaseInit.js";
     
         const chooseImageButton = document.getElementById("chooseImageButton");
         const imageModal = document.getElementById("imageModal");
@@ -87,6 +87,20 @@
         const selectedImagePath = document.getElementById("selectedImagePath");
         const imageGallery = document.getElementById("imageGallery");
         const recipeForm = document.getElementById("recipeForm");
+        const alertBox = document.getElementById("alertBox");
+
+        auth.onAuthStateChanged(user => {
+            if (!user) {
+                alertBox.style.display = "block";
+                alertBox.innerHTML = "Only logged-in users can submit recipes.";
+
+                setTimeout(() => {
+                    window.location.href = "userLogin.html";
+                }, 2000);
+            } else {
+                alertBox.style.display = "none";
+            }
+        });
     
         chooseImageButton.addEventListener("click", () => {
             imageModal.style.display = "block";
@@ -119,8 +133,16 @@
     
         recipeForm.addEventListener("submit", async (e) => {
             e.preventDefault();
+
+            const user = auth.currentUser;
+            if (!user) {
+                alertBox.style.display = "block";
+                alertBox.innerHTML = "Only logged-in users can submit recipes.";
+                return;
+            }
     
             const formData = {
+                userId: user.uid,
                 title: recipeForm.title.value,
                 category: recipeForm.category.value,
                 source: recipeForm.source.value,
