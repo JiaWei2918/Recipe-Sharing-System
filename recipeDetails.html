@@ -3,24 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recipe Details | RecipeShare</title>
-    <link rel="stylesheet" href="recipeDetails.css">
+    <title>Recipe Details</title>
+    <link rel="stylesheet" href="https://fonts.bunny.net/css?family=lora:400,400i,700,700i|playfair-display:400,700|poppins:400|roboto-condensed:400,700">
+    <link rel="stylesheet" href="public/recipeDetails.css">
+    <link rel="stylesheet" href="public/sidebar.css">
 </head>
 <body>
+    <div id="sidebar-placeholder"></div>
+
     <div class="recipe-container">
-        <!-- Recipe Image -->
         <div class="recipe-image">
-            <img src="fish-and-chips.jpg" alt="Fish & Chips">
+            <img src="public/images/fish-and-chips.jpg" alt="Fish & Chips">
         </div>
 
-        <!-- Recipe Details -->
         <div class="recipe-content">
             <h1>Fish & Chips</h1>
             <p class="description">
                 A classic British dish of fried fish in crispy batter served with golden fries. Perfect for a quick, delicious meal.
             </p>
 
-            <!-- Preparation Time -->
             <div class="prep-time">
                 <h2>Preparation Time</h2>
                 <ul>
@@ -30,7 +31,6 @@
                 </ul>
             </div>
 
-            <!-- Ingredients List -->
             <div class="ingredients">
                 <h2>Ingredients</h2>
                 <ul>
@@ -44,7 +44,6 @@
                 </ul>
             </div>
 
-            <!-- Recipe Steps -->
             <div class="steps">
                 <h2>Steps</h2>
                 <ol>
@@ -58,5 +57,7 @@
             </div>
         </div>
     </div>
+
+    <script type="module" src="public/sidebar.js"></script>
 </body>
 </html>

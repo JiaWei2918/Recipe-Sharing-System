@@ -7,39 +7,6 @@ body {
   padding-top: 60px; /* Add space for the fixed navbar */
 }
 
-/* Navbar Styles */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #333;
-  color: white;
-  padding: 10px 20px;
-  position: fixed;
-  width: 100%;
-  top: 0;
-  left: 0;
-  z-index: 1000;
-}
-
-.navbar .logo {
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.navbar .actions a {
-  color: white;
-  margin-left: 15px;
-  text-decoration: none;
-}
-
-/* Search Bar Container */
-.search-bar-container {
-  margin-top: 80px; /* Space to avoid overlap with the navbar */
-  padding: 10px;
-  text-align: center;
-}
-
 .search-bar {
   display: inline-flex;
   max-width: 800px;
@@ -51,30 +18,47 @@ body {
   background-color: #fff;
 }
 
-.search-bar input {
-  width: 80%;
-  padding: 10px;
-  border: none;
-  border-radius: 25px;
+.row {
+  margin-top: 150px;
+  margin-left: 30%;
+}
+
+.search-bar input[type="text"] {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 250px;
 }
 
 .search-bar button {
-  padding: 10px 20px;
-  background-color: #ff9900;
-  color: white;
+  padding: 8px 12px;
+  background-color: #f77f00;
   border: none;
+  color: #fff;
+  border-radius: 4px;
   cursor: pointer;
   border-radius: 25px;
 }
 
-/* Recipe List Section */
+.search-bar button i {
+  margin-left: 8px;
+}
+
+.actions button {
+  background-color: #e63946;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  margin-left: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
 .recipe-list {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  padding: 20px;
-  justify-content: center;
-  margin-top: 20px; /* Adjusted margin to create space below the navbar */
+  margin-top: 40px;
 }
 
 .recipe-card {
@@ -88,6 +72,7 @@ body {
 
 .recipe-card:hover {
   transform: scale(1.05);
+  cursor: pointer;
 }
 
 .recipe-card img {

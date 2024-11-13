@@ -4,29 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forgot Password</title>
-    <link rel="stylesheet" href="https://fonts.bunny.net/css?family=lora:400,400i,700,700i|playfair-display:400,700|poppins:400|roboto-condensed:400,700">
+    <link rel="stylesheet" href="https://fonts.bunny.net/css?family=lora:400,400i,700,700i|playfair-display:400,700|Pacifico: 400&display=swap|roboto-condensed:400,700">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Raleway:wght@400;500&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="forgotPass.css">
-    <link rel="stylesheet" href="sidebar.css">
+    <link rel="stylesheet" href="public/forgotPass.css">
+    <link rel="stylesheet" href="public/sidebar.css">
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyAi9neqoH67SXQ2JRxkVY_bl9xGCoHeYUI",
-            authDomain: "rad-tjw.firebaseapp.com",
-            projectId: "rad-tjw",
-            storageBucket: "rad-tjw.appspot.com",
-            messagingSenderId: "574586917129",
-            appId: "1:574586917129:web:a6242e4bc8621a6bcf83d8",
-            measurementId: "G-QW1W8CBYVT"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
+        import { app, auth, sendPasswordResetEmail } from "/public/firebaseInit.js";
 
         document.addEventListener('DOMContentLoaded', function () {
             const forgotPasswordForm = document.getElementById('forgot-password-form');
@@ -56,7 +42,7 @@
                 
                         setTimeout(() => {
                             alertBox.style.display = 'none';
-                        }, 3000);
+                        }, 5000);
                     });
             });
         });
@@ -88,22 +74,24 @@
         </div>
     </div>
 
+    <script type="module" src="public/sidebar.js"></script>
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-          fetch("sidebar.html")
-            .then(response => response.text())
-            .then(data => {
-              document.getElementById("sidebar-placeholder").innerHTML = data;
-    
-              const currentPage = window.location.pathname.split('/').pop();
-              const links = document.querySelectorAll('.customNav-link');
-              
-              links.forEach(link => {
-                if (link.getAttribute('href') === currentPage) {
-                  link.classList.add('active');
-                }
-              });
-            });
+            fetch("sidebar.html")
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("sidebar-placeholder").innerHTML = data;
+
+                    const currentPage = window.location.pathname.split('/').pop();
+                    const links = document.querySelectorAll('.customNav-link');
+                    
+                    links.forEach(link => {
+                        if (link.getAttribute('href') === currentPage) {
+                            link.classList.add('active');
+                        }
+                    });
+                });
         });
     </script>
 </body>

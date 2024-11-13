@@ -5,30 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Browse Recipes</title>
     <link rel="stylesheet" href="https://fonts.bunny.net/css?family=lora:400,400i,700,700i|playfair-display:400,700|poppins:400|roboto-condensed:400,700">
-    <link rel="stylesheet" href="recipeBrowse.css">
-    <link rel="stylesheet" href="sidebar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="public/recipeBrowse.css">
+    <link rel="stylesheet" href="public/sidebar.css">
 </head>
 <body>
-    <!-- Top Navigation Bar -->
-<header class="navbar">
-    <div class="logo">RecipeShare</div>
-    <div class="search-bar">
-        <input type="text" id="search-input" placeholder="Search for recipes or ingredients..." oninput="filterRecipes()">
-        <button onclick="filterRecipes()">Search</button>
-    </div>
-    <div class="actions">
-        <a href="#">Log in</a>
-        <a href="#">Sign up</a>
-        <a href="#">Submit</a>
-    </div>
-</header>
+    <div id="sidebar-placeholder"></div>
 
-
-    <!-- Recipe List Section -->
+    <div class="row">
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="Search for recipes or ingredients..." oninput="filterRecipes()">
+            <button onclick="filterRecipes()">Search<i class="fa fa-search"></i></button>
+        </div>
+        <div class="actions">
+            <button>Share on Facebook</button>
+            <button>Create Event</button>
+        </div>
+    </div>
+    
     <div class="recipe-list">
-        <!-- Recipe Card 1 -->
-        <div class="recipe-card" data-name="Classic Apple Pie" data-ingredients="apples, sugar, flour, butter">
-            <img src="apple-pie.jpg" alt="Classic Apple Pie">
+        <div class="recipe-card">
+            <img src="public/images/apple-pie.jpg" alt="Classic Apple Pie">
             <div class="recipe-info">
                 <h2>Classic Apple Pie</h2>
                 <p class="category">Dessert</p>
@@ -38,9 +36,8 @@
             </div>
         </div>
 
-        <!-- Recipe Card 2 -->
-        <div class="recipe-card" data-name="Fish & Chips" data-ingredients="fish, potatoes, oil, salt">
-            <img src="fish-and-chips.jpg" alt="Fish & Chips">
+        <div class="recipe-card" data-name="Fish & Chips" data-ingredients="fish, potatoes, oil, salt" onclick="window.location.href='recipeDetails.html'">
+            <img src="public/images/fish-and-chips.jpg" alt="Fish & Chips">
             <div class="recipe-info">
                 <h2>Fish & Chips</h2>
                 <p class="category">Main</p>
@@ -50,9 +47,8 @@
             </div>
         </div>
 
-        <!-- Recipe Card 3 -->
         <div class="recipe-card" data-name="Spaghetti Carbonara" data-ingredients="spaghetti, eggs, cheese, pancetta">
-            <img src="spaghetti.jpg" alt="Spaghetti Carbonara">
+            <img src="public/images/spaghetti.jpg" alt="Spaghetti Carbonara">
             <div class="recipe-info">
                 <h2>Spaghetti Carbonara</h2>
                 <p class="category">Main</p>
@@ -62,9 +58,8 @@
             </div>
         </div>
 
-        <!-- Recipe Card 4 -->
         <div class="recipe-card" data-name="Grilled Cheese" data-ingredients="bread, cheese, butter">
-            <img src="grilled-cheese.jpg" alt="Grilled Cheese">
+            <img src="public/images/grilled-cheese.jpg" alt="Grilled Cheese">
             <div class="recipe-info">
                 <h2>Grilled Cheese</h2>
                 <p class="category">Snack</p>
@@ -73,10 +68,9 @@
                 <p class="ingredients">4 Ingredients</p>
             </div>
         </div>
-
-        <!-- Recipe Card 5 -->
+        
         <div class="recipe-card" data-name="Caesar Salad" data-ingredients="romaine, croutons, cheese, dressing">
-            <img src="caesar-salad.jpg" alt="Caesar Salad">
+            <img src="public/images/caesar-salad.jpg" alt="Caesar Salad">
             <div class="recipe-info">
                 <h2>Caesar Salad</h2>
                 <p class="category">Side</p>
@@ -86,26 +80,9 @@
             </div>
         </div>
     </div>
-    <div id="sidebar-placeholder"></div>
 
+    <script type="module" src="public/sidebar.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            fetch("sidebar.html")
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById("sidebar-placeholder").innerHTML = data;
-
-                    const currentPage = window.location.pathname.split('/').pop();
-                    const links = document.querySelectorAll('.customNav-right a');
-                    
-                    links.forEach(link => {
-                        if (link.getAttribute('href') === currentPage) {
-                            link.classList.add('active');
-                        }
-                    });
-                });
-        });
-
         function filterRecipes() {
             const searchInput = document.getElementById('search-input').value.toLowerCase();
             const recipeCards = document.querySelectorAll('.recipe-card');
