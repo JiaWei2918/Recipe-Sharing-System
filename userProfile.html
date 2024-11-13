@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="public/userProfile.css">
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
     <script type="module">
         import { auth, db, doc, collection, query, where, getDocs, onAuthStateChanged, updateDoc } from "/public/firebaseInit.js";
 
@@ -26,9 +28,9 @@
                             document.getElementById('profile-title-text').innerText = `${userData.username}'s Recipe Box`;
                             document.getElementById('profilePic').src = userData.photoURL || 'public/images/usernotlogin.JPG';
                             document.getElementById('profileDescription').innerText = userData.description || 'No Bio';
-                            document.getElementById('twitterLink').innerText = userData.twitter || 'No Twitter';
-                            document.getElementById('instagramLink').innerText = userData.instagram || 'No Instagram';
-                            document.getElementById('pinterestLink').innerText = userData.pinterest || 'No Pinterest';
+                            document.getElementById('xLink').innerText = userData.x || 'X';
+                            document.getElementById('instagramLink').innerText = userData.instagram || 'Instagram';
+                            document.getElementById('pinterestLink').innerText = userData.pinterest || 'Pinterest';
                         } else {
                             console.log("User does not exist.");
                         }
@@ -49,27 +51,35 @@
             const q = query(recipesRef, where("userId", "==", userId));
 
             getDocs(q).then((querySnapshot) => {
-                querySnapshot.forEach((docSnapshot) => {
-                    const recipe = docSnapshot.data();
-                    const recipeCard = `
-                        <div class="col-md-4 mb-4">
-                            <div class="card">
-                                <img src="${recipe.image}" class="card-img-top" alt="Recipe Image">
-                                <div class="card-body">
-                                    <h5 class="card-title">${recipe.title}</h5>
-                                    <p class="card-text"><small>${recipe.cookTime}</small></p>
+                const submittedRecipesContainer = document.getElementById('submittedRecipes');
+                submittedRecipesContainer.innerHTML = '';
+        
+                if (querySnapshot.empty) {
+                    // Display a message if there are no recipes
+                    submittedRecipesContainer.innerHTML = '<p class="text-muted">No recipes submitted yet.</p>';
+                } else {
+                    querySnapshot.forEach((docSnapshot) => {
+                        const recipe = docSnapshot.data();
+                        const recipeCard = `
+                            <div class="col-md-4 mb-4">
+                                <div class="card">
+                                    <img src="${recipe.image}" class="card-img-top" alt="Recipe Image">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${recipe.title}</h5>
+                                        <p class="card-text"><small>${recipe.cookTime}</small></p>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>`;
-                    document.getElementById('submittedRecipes').innerHTML += recipeCard;
-                });
+                            </div>`;
+                        submittedRecipesContainer.innerHTML += recipeCard;
+                    });
+                }
             }).catch((error) => {
                 console.log("Error getting recipes:", error);
+                document.getElementById('submittedRecipes').innerHTML = '<p class="text-danger">Unable to load recipes. Please try again later.</p>';
             });
         }
 
         function toggleEditMode() {
-            alert("Cancel button clicked!");
             const profileView = document.getElementById('profileView');
             const profileEdit = document.getElementById('profileEdit');
             if (profileView.style.display === 'none') {
@@ -85,11 +95,6 @@
             }
         }
 
-        function selectPhoto(photoPath) {
-            document.getElementById('editProfilePic').src = photoPath;
-            document.getElementById('profilePicInput').value = photoPath;
-        }
-
         async function saveProfile() {
             try {
                 const q = query(collection(db, 'users'), where('uid', '==', auth.currentUser.uid));
@@ -101,10 +106,10 @@
 
                     const updatedData = {
                         description: document.getElementById('editProfileDescription').value,
-                        twitter: document.getElementById('twitter').value,
+                        x: document.getElementById('x').value,
                         instagram: document.getElementById('instagram').value,
                         pinterest: document.getElementById('pinterest').value,
-                        photoPath: document.getElementById('profilePicInput').value,
+                        photoURL: document.getElementById('profilePicInput').value,
                     };
 
                     await updateDoc(userRef, updatedData);
@@ -120,21 +125,59 @@
             }
         }
 
+        function downloadProfile() {
+            const profileElement = document.getElementById('profile');
+
+            html2canvas(profileElement).then(canvas => {
+                const imageDataURL = canvas.toDataURL("image/png");
+
+                const downloadLink = document.createElement("a");
+                downloadLink.href = imageDataURL;
+                downloadLink.download = "profile.png";
+
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+
+                alert("Download successful! Your profile image has been saved.");
+            }).catch(error => {
+                console.error("Error capturing profile:", error);
+                alert("Download failed. Please try again."); 
+            });
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
         window.onload = () => {
             loadUserProfile();
 
             document.getElementById('edit-icon').addEventListener('click', toggleEditMode);
             document.getElementById('cancelButton').addEventListener('click', toggleEditMode);
             document.getElementById('saveProfile').addEventListener('click', saveProfile);
+            document.getElementById('downloadProfile').addEventListener('click', downloadProfile);
+            document.getElementById('goBackIcon').addEventListener('click', goBack);
+        }
+    </script>
+
+    <script>
+        function selectPhoto(photoPath) {
+            document.getElementById('editProfilePic').src = photoPath;
+            document.getElementById('profilePicInput').value = photoPath;
         }
     </script>
 </head>
 <body>
-    <div class="container my-5">
+    <div class="container my-5" id="profile">
         <div class="text-center mb-4">
             <h2 class="profile-title" id="profile-title">
+                <a href="#" id="goBackIcon">
+                    <img src="public/images/back.png" alt="Back" class="back-icon">
+                </a>
                 <span id="profile-title-text">User's Recipe Box</span>
                 <i class="fas fa-edit" id="edit-icon" style="cursor: pointer;"></i>
+                <i class="fas fa-file-arrow-down" id="downloadProfile" style="cursor: pointer;"></i>
             </h2>
         </div>
 
@@ -146,11 +189,10 @@
                 <div class="col-md-9">
                     <p id="profileDescription" class="profile-description">No Bio.</p>
                     <div class="d-flex align-items-center">
-                        <img src="public/images/square-x-twitter-brands-solid.svg" alt="Twitter" id="twitterIcon" width="24" height="24">
-                        <a href="#" id="twitterLink">No Twitter</a>
+                        <img src="public/images/square-x-twitter-brands-solid.svg" alt="x" id="xIcon" width="24" height="24">
+                        <a href="#" id="xLink"></a>
                         <i class="fab fa-instagram"><a href="#" id="instagramLink"></a></i>
                         <i class="fab fa-pinterest"><a href="#" id="pinterestLink"></a></i>
-                        <button class="btn btn-primary ms-2">Share</button>
                     </div>
                 </div>
             </div>
@@ -165,16 +207,28 @@
 
                         <div id="photoGallery" class="photo-gallery">
                             <p>Select a profile picture:</p>
-                            <img src="account-photo/profile-boy.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/profile-boy.png')">
-                            <img src="account-photo/profile-girl.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/profile-girl.png')">
-                            <img src="account-photo/jiawei.jpg" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/jiawei.jpg')">
+                            <img src="account-photo/p1.jpg" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p1.jpg')">
+                            <img src="account-photo/p2.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p2.png')">
+                            <img src="account-photo/p3.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p3.png')">
+                            <img src="account-photo/p4.jpg" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p4.jpg')">
+                            <img src="account-photo/p5.jpg" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p5.jpg')">
+                            <img src="account-photo/p6.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p6.png')">
+                            <img src="account-photo/p7.jpg" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p7.jpg')">
+                            <img src="account-photo/p8.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p8.png')">
+                            <img src="account-photo/p9.jpg" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p9.jpg')">
+                            <img src="account-photo/p10.jpg" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p10.jpg')">
+                            <img src="account-photo/p11.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p11.png')">
+                            <img src="account-photo/p12.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p12.png')">
+                            <img src="account-photo/p13.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p13.png')">
+                            <img src="account-photo/p14.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p14.png')">
+                            <img src="account-photo/p15.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p15.png')">
                         </div>
                     </div>
                     <div class="col-md-9">
                         <textarea id="editProfileDescription" class="form-control profile-description" rows="5">No Bio.</textarea>
                         <div class="d-flex flex-column align-items-start mt-3">
-                            <label for="twitter" class="mb-2">Twitter username:</label>
-                            <input type="text" id="twitter" class="form-control mb-2" placeholder="@emmag">
+                            <label for="x" class="mb-2">X username:</label>
+                            <input type="text" id="x" class="form-control mb-2" placeholder="@emmag">
                             
                             <label for="instagram" class="mb-2">Instagram username:</label>
                             <input type="text" id="instagram" class="form-control mb-2" placeholder="@emmag">
