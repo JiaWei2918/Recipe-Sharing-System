@@ -18,6 +18,9 @@
                 <label for="title">Recipe Title:</label>
                 <input type="text" id="title" name="title" required>
 
+                <label for="description">Description</label>
+                <input type="text" id="description" name="description" required>
+
                 <label for="category">Category:</label>
                 <div class="custom-select">
                     <select id="category" name="category" required>
@@ -141,6 +144,7 @@
             const formData = {
                 userId: user.uid,
                 title: recipeForm.title.value,
+                description: recipeForm.description.value,
                 category: recipeForm.category.value,
                 source: recipeForm.source.value,
                 ingredients: recipeForm.ingredients.value.split("\n"),
