@@ -15,8 +15,8 @@
 
     <div class="row">
         <div class="search-bar">
-            <input type="text" placeholder="Search for recipes or ingredients...">
-            <button>Search<i class="fa fa-search"></i></button>
+            <input type="text" id="search-input" placeholder="Search for recipes or ingredients..." oninput="filterRecipes()">
+            <button onclick="filterRecipes()">Search<i class="fa fa-search"></i></button>
         </div>
         <div class="actions">
             <button>Share on Facebook</button>
@@ -36,7 +36,7 @@
             </div>
         </div>
 
-        <div class="recipe-card" onclick="window.location.href='recipeDetails.html'">
+        <div class="recipe-card" data-name="Fish & Chips" data-ingredients="fish, potatoes, oil, salt" onclick="window.location.href='recipeDetails.html'">
             <img src="public/images/fish-and-chips.jpg" alt="Fish & Chips">
             <div class="recipe-info">
                 <h2>Fish & Chips</h2>
@@ -47,7 +47,7 @@
             </div>
         </div>
 
-        <div class="recipe-card">
+        <div class="recipe-card" data-name="Spaghetti Carbonara" data-ingredients="spaghetti, eggs, cheese, pancetta">
             <img src="public/images/spaghetti.jpg" alt="Spaghetti Carbonara">
             <div class="recipe-info">
                 <h2>Spaghetti Carbonara</h2>
@@ -58,7 +58,7 @@
             </div>
         </div>
 
-        <div class="recipe-card">
+        <div class="recipe-card" data-name="Grilled Cheese" data-ingredients="bread, cheese, butter">
             <img src="public/images/grilled-cheese.jpg" alt="Grilled Cheese">
             <div class="recipe-info">
                 <h2>Grilled Cheese</h2>
@@ -69,7 +69,7 @@
             </div>
         </div>
         
-        <div class="recipe-card">
+        <div class="recipe-card" data-name="Caesar Salad" data-ingredients="romaine, croutons, cheese, dressing">
             <img src="public/images/caesar-salad.jpg" alt="Caesar Salad">
             <div class="recipe-info">
                 <h2>Caesar Salad</h2>
@@ -82,5 +82,20 @@
     </div>
 
     <script type="module" src="public/sidebar.js"></script>
+    <script>
+        function filterRecipes() {
+            const searchInput = document.getElementById('search-input').value.toLowerCase();
+            const recipeCards = document.querySelectorAll('.recipe-card');
+            recipeCards.forEach(card => {
+                const recipeName = card.getAttribute('data-name').toLowerCase();
+                const recipeIngredients = card.getAttribute('data-ingredients').toLowerCase();
+                if (recipeName.includes(searchInput) || recipeIngredients.includes(searchInput)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
 </body>
 </html>
