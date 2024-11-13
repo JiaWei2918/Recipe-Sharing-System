@@ -7,11 +7,46 @@ body {
   font-weight: bold;
   text-align: left;
   color: #21618c;
+  font-size: 3.0em;
+  padding-left: 4%;
+  font-family: 'Bebas Neue', sans-serif;
+}
+
+#edit-icon {
+  margin-left: 10px;
+  font-size: 20px;
+  cursor: pointer;
 }
 
 .profile-description {
-  font-size: 1em;
+  font-size: 1.1em;
   color: #555;
+  font-family: "Orbitron", serif;
+  font-weight: 800;
+  padding-bottom: 8%;
+}
+
+.d-flex i a {
+  margin-right: 20px;
+}
+
+.d-flex a {
+  margin-left: 10px;
+  margin-right: 20px;
+  font-family: "Font Awesome 6 Brands";
+  font-weight: 400;
+  color: black;
+  text-decoration: none;
+}
+
+.d-flex .fa {
+  font-size: 1.5em;
+  color: #21618c;
+  margin-right: 10px;
+}
+
+.d-flex .fa:hover {
+  color: #0056b3;
 }
 
 .nav-item {
@@ -62,12 +97,28 @@ body {
 }
 
 #profileView img.rounded-circle {
-  border: 3px solid #007bff;
+  width: 80%;
+  height: 100%;
+  border: 5px solid #007bff;
   transition: border-color 0.3s ease;
 }
 
 #profileView img.rounded-circle:hover {
   border-color: #0056b3;
+}
+
+.photo-gallery img.profile-option {
+  width: 35%;
+  height: 35%;
+  cursor: pointer;
+  margin: 5px;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+
+.photo-gallery img.profile-option:hover {
+  transform: scale(1.1);
+  border: 2px solid #007bff;
 }
 
 .pagination .page-link {
@@ -78,4 +129,32 @@ body {
   background-color: #21618c;
   border-color: #21618c;
   color: #fff;
+}
+
+@media (max-width: 768px) {
+  .profile-title {
+      font-size: 1.2em;
+  }
+
+  .profile-description {
+      font-size: 1em;
+  }
+
+  .col-md-9 {
+      margin-top: 20px;
+  }
+
+  .d-flex .btn-primary {
+      font-weight: 500;
+  }
+
+  #profileView img.rounded-circle {
+      width: 100px;
+      height: 100px;
+  }
+
+  #profileEdit img.rounded-circle {
+      width: 100px;
+      height: 100px;
+  }
 }
