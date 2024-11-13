@@ -12,51 +12,101 @@
     <div id="sidebar-placeholder"></div>
 
     <div class="recipe-container">
-        <div class="recipe-image">
-            <img src="public/images/fish-and-chips.jpg" alt="Fish & Chips">
+        <div class="recipe-image" id="recipeImage">
+            <!-- Recipe image will be dynamically loaded here -->
         </div>
 
         <div class="recipe-content">
-            <h1>Fish & Chips</h1>
-            <p class="description">
-                A classic British dish of fried fish in crispy batter served with golden fries. Perfect for a quick, delicious meal.
+            <h1 id="recipeTitle">Recipe Title</h1>
+            <p class="description" id="recipeDescription">
+                <!-- Recipe description or other summary information -->
             </p>
 
             <div class="prep-time">
                 <h2>Preparation Time</h2>
                 <ul>
-                    <li><strong>Total:</strong> 25 minutes</li>
-                    <li><strong>Preparation:</strong> 10 minutes</li>
-                    <li><strong>Cooking:</strong> 15 minutes</li>
+                    <li><strong>Total:</strong> <span id="totalTime">--</span> minutes</li>
+                    <li><strong>Preparation:</strong> <span id="prepTime">--</span> minutes</li>
+                    <li><strong>Cooking:</strong> <span id="cookTime">--</span> minutes</li>
                 </ul>
             </div>
 
             <div class="ingredients">
                 <h2>Ingredients</h2>
-                <ul>
-                    <li>1 large cod fillet</li>
-                    <li>1 cup all-purpose flour</li>
-                    <li>1 tsp baking powder</li>
-                    <li>1/2 cup cold water</li>
-                    <li>Salt and pepper to taste</li>
-                    <li>Vegetable oil for frying</li>
-                    <li>Potatoes, cut into fries</li>
+                <ul id="ingredientsList">
+                    <!-- Ingredients list will be dynamically loaded here -->
                 </ul>
             </div>
 
             <div class="steps">
                 <h2>Steps</h2>
-                <ol>
-                    <li>Heat oil in a deep pan for frying.</li>
-                    <li>In a bowl, mix flour, baking powder, and a pinch of salt. Add cold water to create a smooth batter.</li>
-                    <li>Dip the cod fillet in the batter and coat it evenly.</li>
-                    <li>Carefully place the fish in the hot oil and fry until golden and crispy.</li>
-                    <li>Fry the potatoes in the same oil until golden and crispy. Drain on paper towels.</li>
-                    <li>Serve the fish with fries and a slice of lemon.</li>
+                <ol id="stepsList">
+                    <!-- Steps will be dynamically loaded here -->
                 </ol>
             </div>
         </div>
     </div>
+
+    <script type="module">
+        import { db, doc, getDoc } from '/public/firebaseInit.js';
+
+        // Get the recipe ID from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const recipeId = urlParams.get('id');
+
+        async function fetchRecipeDetails(recipeId) {
+            try {
+                if (!recipeId) {
+                    console.error("No recipe ID found in URL.");
+                    return;
+                }
+
+                // Reference to the specific document by ID
+                const docRef = doc(db, "recipes", recipeId);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const recipe = docSnap.data();
+
+                    // Set the title, image, and other fields
+                    document.getElementById("recipeTitle").innerText = recipe.title;
+                    document.getElementById("recipeImage").innerHTML = `<img src="${recipe.image}" alt="${recipe.title}">`;
+                    document.getElementById("recipeDescription").innerText = `From: ${recipe.source} | Category: ${recipe.category}`;
+                    document.getElementById("totalTime").innerText = recipe.prepTotal || "--";
+                    document.getElementById("prepTime").innerText = recipe.prepTime || "--";
+                    document.getElementById("cookTime").innerText = recipe.cookTime || "--";
+
+                    // Populate ingredients list
+                    const ingredientsList = document.getElementById("ingredientsList");
+                    recipe.ingredients.forEach(ingredient => {
+                        const li = document.createElement("li");
+                        li.innerText = ingredient;
+                        ingredientsList.appendChild(li);
+                    });
+
+                    // Populate steps list
+                    const stepsList = document.getElementById("stepsList");
+                    recipe.steps.split(".").forEach(step => {
+                        if (step.trim() !== "") {
+                            const li = document.createElement("li");
+                            li.innerText = step.trim();
+                            stepsList.appendChild(li);
+                        }
+                    });
+                } else {
+                    console.error("No recipe found with this ID");
+                }
+            } catch (error) {
+                console.error("Error fetching recipe details:", error);
+            }
+        }
+
+        if (recipeId) {
+            fetchRecipeDetails(recipeId);
+        } else {
+            console.error("No recipe ID provided in URL");
+        }
+    </script>
 
     <script type="module" src="public/sidebar.js"></script>
 </body>
