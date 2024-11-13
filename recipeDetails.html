@@ -13,13 +13,11 @@
 
     <div class="recipe-container">
         <div class="recipe-image" id="recipeImage">
-            <!-- Recipe image will be dynamically loaded here -->
         </div>
 
         <div class="recipe-content">
             <h1 id="recipeTitle">Recipe Title</h1>
-            <p class="description" id="recipeDescription">
-                <!-- Recipe description or other summary information -->
+            <p class="description" id="recipeDescription"> 
             </p>
 
             <div class="prep-time">
@@ -34,14 +32,12 @@
             <div class="ingredients">
                 <h2>Ingredients</h2>
                 <ul id="ingredientsList">
-                    <!-- Ingredients list will be dynamically loaded here -->
                 </ul>
             </div>
 
             <div class="steps">
                 <h2>Steps</h2>
                 <ol id="stepsList">
-                    <!-- Steps will be dynamically loaded here -->
                 </ol>
             </div>
         </div>
@@ -50,7 +46,6 @@
     <script type="module">
         import { db, doc, getDoc } from '/public/firebaseInit.js';
 
-        // Get the recipe ID from the URL
         const urlParams = new URLSearchParams(window.location.search);
         const recipeId = urlParams.get('id');
 
@@ -61,14 +56,12 @@
                     return;
                 }
 
-                // Reference to the specific document by ID
                 const docRef = doc(db, "recipes", recipeId);
                 const docSnap = await getDoc(docRef);
 
                 if (docSnap.exists()) {
                     const recipe = docSnap.data();
 
-                    // Set the title, image, and other fields
                     document.getElementById("recipeTitle").innerText = recipe.title;
                     document.getElementById("recipeImage").innerHTML = `<img src="${recipe.image}" alt="${recipe.title}">`;
                     document.getElementById("recipeDescription").innerText = `From: ${recipe.source} | Category: ${recipe.category}`;
@@ -76,7 +69,6 @@
                     document.getElementById("prepTime").innerText = recipe.prepTime || "--";
                     document.getElementById("cookTime").innerText = recipe.cookTime || "--";
 
-                    // Populate ingredients list
                     const ingredientsList = document.getElementById("ingredientsList");
                     recipe.ingredients.forEach(ingredient => {
                         const li = document.createElement("li");
@@ -84,7 +76,6 @@
                         ingredientsList.appendChild(li);
                     });
 
-                    // Populate steps list
                     const stepsList = document.getElementById("stepsList");
                     recipe.steps.split(".").forEach(step => {
                         if (step.trim() !== "") {
