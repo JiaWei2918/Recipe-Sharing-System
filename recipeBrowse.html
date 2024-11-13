@@ -15,87 +15,64 @@
 
     <div class="row">
         <div class="search-bar">
-            <input type="text" id="search-input" placeholder="Search for recipes or ingredients..." oninput="filterRecipes()">
-            <button onclick="filterRecipes()">Search<i class="fa fa-search"></i></button>
-        </div>
-        <div class="actions">
-            <button>Share on Facebook</button>
-            <button>Create Event</button>
+            <input type="text" placeholder="Search for recipes or ingredients..." id="searchInput">
+            <button id="searchButton">Search<i class="fa fa-search"></i></button>
         </div>
     </div>
     
-    <div class="recipe-list">
-        <div class="recipe-card">
-            <img src="public/images/apple-pie.jpg" alt="Classic Apple Pie">
-            <div class="recipe-info">
-                <h2>Classic Apple Pie</h2>
-                <p class="category">Dessert</p>
-                <p class="source">From: Fine Cooking</p>
-                <div class="rating">Rating: ★★★★★</div>
-                <p class="ingredients">13 Ingredients</p>
-            </div>
-        </div>
-
-        <div class="recipe-card" data-name="Fish & Chips" data-ingredients="fish, potatoes, oil, salt" onclick="window.location.href='recipeDetails.html'">
-            <img src="public/images/fish-and-chips.jpg" alt="Fish & Chips">
-            <div class="recipe-info">
-                <h2>Fish & Chips</h2>
-                <p class="category">Main</p>
-                <p class="source">From: British Cuisine</p>
-                <div class="rating">Rating: ★★★★☆</div>
-                <p class="ingredients">8 Ingredients</p>
-            </div>
-        </div>
-
-        <div class="recipe-card" data-name="Spaghetti Carbonara" data-ingredients="spaghetti, eggs, cheese, pancetta">
-            <img src="public/images/spaghetti.jpg" alt="Spaghetti Carbonara">
-            <div class="recipe-info">
-                <h2>Spaghetti Carbonara</h2>
-                <p class="category">Main</p>
-                <p class="source">From: Italian Cuisine</p>
-                <div class="rating">Rating: ★★★★★</div>
-                <p class="ingredients">6 Ingredients</p>
-            </div>
-        </div>
-
-        <div class="recipe-card" data-name="Grilled Cheese" data-ingredients="bread, cheese, butter">
-            <img src="public/images/grilled-cheese.jpg" alt="Grilled Cheese">
-            <div class="recipe-info">
-                <h2>Grilled Cheese</h2>
-                <p class="category">Snack</p>
-                <p class="source">From: Comfort Foods</p>
-                <div class="rating">Rating: ★★★★☆</div>
-                <p class="ingredients">4 Ingredients</p>
-            </div>
-        </div>
-        
-        <div class="recipe-card" data-name="Caesar Salad" data-ingredients="romaine, croutons, cheese, dressing">
-            <img src="public/images/caesar-salad.jpg" alt="Caesar Salad">
-            <div class="recipe-info">
-                <h2>Caesar Salad</h2>
-                <p class="category">Side</p>
-                <p class="source">From: Healthy Choices</p>
-                <div class="rating">Rating: ★★★★☆</div>
-                <p class="ingredients">7 Ingredients</p>
-            </div>
-        </div>
+    <div class="recipe-list" id="recipeList">
+        <!-- Recipe cards will be dynamically loaded here -->
     </div>
 
-    <script type="module" src="public/sidebar.js"></script>
-    <script>
-        function filterRecipes() {
-            const searchInput = document.getElementById('search-input').value.toLowerCase();
-            const recipeCards = document.querySelectorAll('.recipe-card');
-            recipeCards.forEach(card => {
-                const recipeName = card.getAttribute('data-name').toLowerCase();
-                const recipeIngredients = card.getAttribute('data-ingredients').toLowerCase();
-                if (recipeName.includes(searchInput) || recipeIngredients.includes(searchInput)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
+    <script type="module">
+        import { db, collection, getDocs } from '/public/firebaseInit.js';
+
+        const recipeList = document.getElementById("recipeList");
+
+        async function fetchRecipes() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "recipes"));
+                recipeList.innerHTML = ''; // Clear existing content
+                querySnapshot.forEach((doc) => {
+                    const recipe = doc.data();
+                    const recipeCard = document.createElement("div");
+                    recipeCard.classList.add("recipe-card");
+
+                    recipeCard.innerHTML = `
+                        <img src="${recipe.image}" alt="${recipe.title}">
+                        <div class="recipe-info">
+                            <h2>${recipe.title}</h2>
+                            <p class="category">${recipe.category}</p>
+                            <p class="source">From: ${recipe.source}</p>
+                            <div class="rating">Rating: ★★★★★</div>
+                            <p class="ingredients">${recipe.ingredients.length} Ingredients</p>
+                        </div>
+                    `;
+
+                    // Add event listener to navigate to the recipe details page
+                    recipeCard.addEventListener("click", () => {
+                        window.location.href = `recipeDetails.html?id=${doc.id}`;
+                    });
+
+                    recipeList.appendChild(recipeCard);
+                });
+            } catch (error) {
+                console.error("Error fetching recipes:", error);
+            }
         }
+
+        fetchRecipes();
+
+        document.getElementById("searchButton").addEventListener("click", () => {
+            const searchInput = document.getElementById("searchInput").value.toLowerCase();
+            const recipeCards = document.querySelectorAll(".recipe-card");
+            recipeCards.forEach(card => {
+                const title = card.querySelector("h2").innerText.toLowerCase();
+                const ingredients = card.querySelector(".ingredients").innerText.toLowerCase();
+                card.style.display = title.includes(searchInput) || ingredients.includes(searchInput) ? "" : "none";
+            });
+        });
     </script>
+    <script type="module" src="public/sidebar.js"></script>
 </body>
 </html>
