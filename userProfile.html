@@ -12,7 +12,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <script type="module">
-        import { auth, db, doc, collection, query, where, getDocs, onAuthStateChanged, updateDoc } from "/public/firebaseInit.js";
+        import { auth, db, doc, collection, query, where, getDoc, getDocs, onAuthStateChanged, updateDoc } from "/public/firebaseInit.js";
 
         function loadUserProfile() {
             onAuthStateChanged(auth, (user) => {
@@ -33,12 +33,15 @@
                             document.getElementById('pinterestLink').innerText = userData.pinterest || 'Pinterest';
                         } else {
                             console.log("User does not exist.");
+                            alert("Error: User profile not found. Please try again later.");
                         }
                     }).catch((error) => {
                         console.log("Error getting document:", error);
+                        alert("Error retrieving your profile. Please check your connection and try again.");
                     });
 
                     loadSubmittedRecipes(user.uid);
+                    loadSavedRecipes(user.uid);
                 } else {
                     console.log("No user is signed in.");
                     window.location.href = "userLogin.html";
@@ -55,18 +58,19 @@
                 submittedRecipesContainer.innerHTML = '';
         
                 if (querySnapshot.empty) {
-                    // Display a message if there are no recipes
                     submittedRecipesContainer.innerHTML = '<p class="text-muted">No recipes submitted yet.</p>';
                 } else {
                     querySnapshot.forEach((docSnapshot) => {
                         const recipe = docSnapshot.data();
+                        const timestamp = recipe.created ? recipe.created.toDate().toLocaleString() : 'Unknown';
+
                         const recipeCard = `
                             <div class="col-md-4 mb-4">
-                                <div class="card">
-                                    <img src="${recipe.image}" class="card-img-top" alt="Recipe Image">
+                                <div class="recipe-card">
+                                    <img src="${recipe.image}" class="card-img-top recipe-image" alt="Recipe Image">
                                     <div class="card-body">
-                                        <h5 class="card-title">${recipe.title}</h5>
-                                        <p class="card-text"><small>${recipe.cookTime}</small></p>
+                                        <h5 class="recipe-title">${recipe.title}</h5>
+                                        <p class="card-text recipe-timestamp"><small>${timestamp}</small></p>
                                     </div>
                                 </div>
                             </div>`;
@@ -76,6 +80,50 @@
             }).catch((error) => {
                 console.log("Error getting recipes:", error);
                 document.getElementById('submittedRecipes').innerHTML = '<p class="text-danger">Unable to load recipes. Please try again later.</p>';
+            });
+        }
+
+        async function loadSavedRecipes(userId) {
+            const savedRecipesRef = collection(db, 'saved_recipes');
+            const q = query(savedRecipesRef, where("user_id", "==", userId));
+
+            getDocs(q).then((querySnapshot) => {
+                const savedRecipesContainer = document.getElementById('savedRecipes');
+                savedRecipesContainer.innerHTML = '';
+
+                if (querySnapshot.empty) {
+                    savedRecipesContainer.innerHTML = '<p class="text-muted">No saved recipes yet.</p>';
+                } else {
+                    querySnapshot.forEach((docSnapshot) => {
+                        const savedRecipe = docSnapshot.data();
+                        const recipeId = savedRecipe.recipe_id;
+                        const timestamp = savedRecipe.saved_at ? savedRecipe.saved_at.toDate().toLocaleString() : 'Unknown';
+
+                        const recipeRef = doc(db, 'recipes', recipeId);
+                        getDoc(recipeRef).then((recipeDoc) => {
+                            if (recipeDoc.exists()) {
+                                const recipe = recipeDoc.data();
+                                const recipeCard = `
+                                    <div class="col-md-4 mb-4">
+                                        <div class="recipe-card">
+                                            <img src="${recipe.image}" class="card-img-top recipe-image" alt="Recipe Image">
+                                            <div class="card-body">
+                                                <h5 class="recipe-title">${recipe.title}</h5>
+                                                <p class="card-text recipe-timestamp"><small>${timestamp}</small></p>
+                                            </div>
+                                        </div>
+                                    </div>`;
+                                savedRecipesContainer.innerHTML += recipeCard;
+                            }
+                        }).catch((error) => {
+                            console.log("Error getting recipe details:", error);
+                            savedRecipesContainer.innerHTML = '<p class="text-danger">Unable to load some recipes. Please try again later.</p>';
+                        });
+                    });
+                }
+            }).catch((error) => {
+                console.log("Error getting saved recipes:", error);
+                document.getElementById('savedRecipes').innerHTML = '<p class="text-danger">Unable to load saved recipes. Please try again later.</p>';
             });
         }
 
@@ -122,6 +170,7 @@
                 }
             } catch (error) {
                 console.error("Error updating profile:", error);
+                alert("Error updating your profile. Please try again later.");
             }
         }
 

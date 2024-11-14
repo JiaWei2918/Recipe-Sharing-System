@@ -74,3 +74,34 @@ li {
 li strong {
   color: #333;
 }
+
+.save-icon {
+  font-size: 35px;
+  cursor: pointer;
+  color: #999;
+  margin-left: 10px;
+  vertical-align: middle;
+  transition: color 0.3s ease;
+}
+
+.save-icon:hover {
+  color: #FF6347;
+  transform: scale(1.50);
+}
+
+.saved {
+  color: red;
+}
+
+.saved:hover {
+  color: #CC0000;
+  transform: scale(1.50);
+}
+
+.recipe-header {
+  padding-left: 2%;
+}
+
+.row {
+  align-items: baseline;
+}

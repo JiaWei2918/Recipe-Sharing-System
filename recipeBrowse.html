@@ -20,12 +20,10 @@
         </div>
     </div>
     
-    <div class="recipe-list" id="recipeList">
-        
-    </div>
+    <div class="recipe-list" id="recipeList"></div>
 
     <script type="module">
-        import { db, collection, getDocs } from '/public/firebaseInit.js';
+        import { db, collection, getDocs, query, where, addDoc, getDoc, doc, auth } from '/public/firebaseInit.js';
 
         const recipeList = document.getElementById("recipeList");
         const searchInput = document.getElementById("searchInput");
@@ -33,7 +31,15 @@
         async function fetchRecipes() {
             try {
                 const querySnapshot = await getDocs(collection(db, "recipes"));
+
+                if (querySnapshot.empty) {
+                    console.warn("No recipes found.");
+                    recipeList.innerHTML = '<p>No recipes available.</p>';
+                    return;
+                }
+
                 recipeList.innerHTML = '';
+
                 querySnapshot.forEach((doc) => {
                     const recipe = doc.data();
                     const recipeCard = document.createElement("div");
@@ -42,13 +48,23 @@
                     recipeCard.innerHTML = `
                         <img src="${recipe.image}" alt="${recipe.title}">
                         <div class="recipe-info">
-                            <h2>${recipe.title}</h2>
+                            <h2>${recipe.title}
+                                <i class="save-icon" id="save-${doc.id}" aria-hidden="true"></i>
+                            </h2>
                             <p class="category">${recipe.category}</p>
                             <p class="source">From: ${recipe.source}</p>
                             <div class="rating">Rating: ★★★★★</div>
                             <p class="ingredients">${recipe.ingredients.length} Ingredients</p>
                         </div>
                     `;
+
+                    const saveIcon = recipeCard.querySelector(`#save-${doc.id}`);
+                    checkIfRecipeSaved(doc.id, saveIcon);
+
+                    saveIcon.addEventListener('click', (event) => {
+                        event.stopPropagation();
+                        saveRecipe(doc.id, saveIcon);
+                    });
 
                     recipeCard.addEventListener("click", () => {
                         window.location.href = `recipeDetails.html?id=${doc.id}`;
@@ -58,12 +74,73 @@
                 });
             } catch (error) {
                 console.error("Error fetching recipes:", error);
+                recipeList.innerHTML = '<p>There was an issue fetching the recipes. Please try again later.</p>';
+            }
+        }
+
+        async function checkIfRecipeSaved(recipeId, saveIcon) {
+            const user = auth.currentUser;
+            if (!user) {
+                console.warn("User is not logged in. Skipping saved recipe check.");
+                return;
+            }
+
+            try {
+                const savedRecipesRef = collection(db, 'saved_recipes');
+                const q = query(savedRecipesRef, where('user_id', '==', user.uid), where('recipe_id', '==', recipeId));
+                const querySnapshot = await getDocs(q);
+
+                if (!querySnapshot.empty) {
+                    saveIcon.classList.add('saved');
+                    saveIcon.innerHTML = "&#9829;";
+                } else {
+                    saveIcon.classList.remove('saved');
+                    saveIcon.innerHTML = "&#9825;";
+                }
+            } catch (error) {
+                console.error("Error checking if recipe is saved:", error);
+                alert("An error occurred while checking the saved status.");
+                return false;
+            }
+        }
+
+        async function saveRecipe(recipeId, saveIcon) {
+            const user = auth.currentUser;
+            if (!user) {
+                alert("Please log in to save recipes.");
+                return;
+            }
+
+            try {
+                const savedRecipesRef = collection(db, 'saved_recipes');
+                const q = query(savedRecipesRef, where('user_id', '==', user.uid), where('recipe_id', '==', recipeId));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    await addDoc(savedRecipesRef, {
+                        user_id: user.uid,
+                        recipe_id: recipeId,
+                        saved_at: new Date()
+                    });
+
+                    alert("Recipe saved!");
+                    saveIcon.classList.add('saved');
+                    saveIcon.innerHTML = "&#9829;";
+                } else {
+                    alert("Recipe is already saved.");
+                    saveIcon.classList.remove('saved');
+                    saveIcon.innerHTML = "&#9825;";
+                }
+            } catch (error) {
+                console.error("Error saving recipe:", error);
+                alert("An error occurred while saving the recipe.");
             }
         }
 
         function filterRecipes() {
             const searchValue = searchInput.value.toLowerCase();
             const recipeCards = document.querySelectorAll(".recipe-card");
+
             recipeCards.forEach(card => {
                 const title = card.querySelector("h2").innerText.toLowerCase();
                 const ingredients = card.querySelector(".ingredients").innerText.toLowerCase();

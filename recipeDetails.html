@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recipe Details</title>
     <link rel="stylesheet" href="https://fonts.bunny.net/css?family=lora:400,400i,700,700i|playfair-display:400,700|poppins:400|roboto-condensed:400,700">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="public/recipeDetails.css">
     <link rel="stylesheet" href="public/sidebar.css">
 </head>
@@ -12,11 +14,13 @@
     <div id="sidebar-placeholder"></div>
 
     <div class="recipe-container">
-        <div class="recipe-image" id="recipeImage">
-        </div>
+        <div class="recipe-image" id="recipeImage"></div>
 
         <div class="recipe-content">
-            <h1 id="recipeTitle">Recipe Title</h1>
+            <div class="row recipe-header">
+                <h1 id="recipeTitle">Recipe Title</h1>
+                <span id="saveRecipeIcon" class="save-icon">&#9825;</span>
+            </div>
             <p class="description" id="recipeDescription"> 
             </p>
 
@@ -31,27 +35,27 @@
 
             <div class="ingredients">
                 <h2>Ingredients</h2>
-                <ul id="ingredientsList">
-                </ul>
+                <ul id="ingredientsList"></ul>
             </div>
 
             <div class="steps">
                 <h2>Steps</h2>
-                <ol id="stepsList">
-                </ol>
+                <ol id="stepsList"></ol>
             </div>
         </div>
     </div>
 
     <script type="module">
-        import { db, doc, getDoc } from '/public/firebaseInit.js';
+        import { db, doc, getDoc, collection, addDoc, query, where, getDocs, auth } from '/public/firebaseInit.js';
 
         const urlParams = new URLSearchParams(window.location.search);
         const recipeId = urlParams.get('id');
+        const saveRecipeIcon = document.getElementById('saveRecipeIcon');
 
         async function fetchRecipeDetails(recipeId) {
             try {
                 if (!recipeId) {
+                    alert("Recipe not found. Please try again.");
                     console.error("No recipe ID found in URL.");
                     return;
                 }
@@ -84,18 +88,82 @@
                             stepsList.appendChild(li);
                         }
                     });
+
+                    checkIfRecipeSaved(recipeId);
                 } else {
+                    alert("Recipe details are currently unavailable. Please try again later.");
                     console.error("No recipe found with this ID");
                 }
             } catch (error) {
                 console.error("Error fetching recipe details:", error);
+                alert("An error occurred while loading the recipe. Please refresh the page or try again later.");
             }
         }
+
+        async function checkIfRecipeSaved(recipeId) {
+            const user = auth.currentUser;
+            if (!user) {
+                console.warn("User is not logged in. Skipping saved recipe check.");
+                return;
+            }
+
+            try {
+                const savedRecipesRef = collection(db, 'saved_recipes');
+                const q = query(savedRecipesRef, where('user_id', '==', user.uid), where('recipe_id', '==', recipeId));
+                const querySnapshot = await getDocs(q);
+
+                if (!querySnapshot.empty) {
+                    saveRecipeIcon.classList.add('saved');
+                    saveRecipeIcon.title = "Recipe Saved";
+                    saveRecipeIcon.innerHTML = "&#9829;";
+                }
+            } catch {
+                console.error("Error checking if recipe is saved:", error);
+                alert("An error occurred while checking saved recipes. Please try again.");
+            }
+            
+        }
+
+        async function saveRecipe(recipeId) {
+            const user = auth.currentUser;
+            if (!user) {
+                alert("Please log in to save recipes.");
+                console.warn("User tried to save a recipe without logging in.");
+                return;
+            }
+
+            try {
+                const savedRecipesRef = collection(db, 'saved_recipes');
+                const q = query(savedRecipesRef, where('user_id', '==', user.uid), where('recipe_id', '==', recipeId));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    await addDoc(savedRecipesRef, {
+                        user_id: user.uid,
+                        recipe_id: recipeId,
+                        saved_at: new Date()
+                    });
+
+                    alert("Recipe saved!");
+                    saveRecipeIcon.classList.add('saved');
+                    saveRecipeIcon.title = "Recipe Saved";
+                    saveRecipeIcon.innerHTML = "&#9829;";
+                } else {
+                    alert("Recipe is already saved.");
+                }
+            } catch (error) {
+                console.error("Error saving recipe:", error);
+                alert("An error occurred while saving the recipe. Please try again.");
+            }
+        }
+
+        saveRecipeIcon.addEventListener('click', () => saveRecipe(recipeId));
 
         if (recipeId) {
             fetchRecipeDetails(recipeId);
         } else {
             console.error("No recipe ID provided in URL");
+            alert("Invalid recipe ID. Please check the link and try again.");
         }
     </script>
 
