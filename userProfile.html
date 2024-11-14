@@ -64,9 +64,9 @@
                         const recipe = docSnapshot.data();
                         const timestamp = recipe.created ? recipe.created.toDate().toLocaleString() : 'Unknown';
 
-                        const recipeCard = `
+                        const recipeCardHTML = `
                             <div class="col-md-4 mb-4">
-                                <div class="recipe-card">
+                                <div class="recipe-card" data-id="${docSnapshot.id}">
                                     <img src="${recipe.image}" class="card-img-top recipe-image" alt="Recipe Image">
                                     <div class="card-body">
                                         <h5 class="recipe-title">${recipe.title}</h5>
@@ -74,7 +74,12 @@
                                     </div>
                                 </div>
                             </div>`;
-                        submittedRecipesContainer.innerHTML += recipeCard;
+                        submittedRecipesContainer.insertAdjacentHTML('beforeend', recipeCardHTML);
+
+                        const recipeCard = submittedRecipesContainer.querySelector(`.recipe-card[data-id="${docSnapshot.id}"]`);
+                        recipeCard.addEventListener("click", () => {
+                            window.location.href = `recipeDetails.html?id=${docSnapshot.id}`;
+                        });
                     });
                 }
             }).catch((error) => {
@@ -103,9 +108,10 @@
                         getDoc(recipeRef).then((recipeDoc) => {
                             if (recipeDoc.exists()) {
                                 const recipe = recipeDoc.data();
-                                const recipeCard = `
+
+                                const recipeCardHTML = `
                                     <div class="col-md-4 mb-4">
-                                        <div class="recipe-card">
+                                        <div class="recipe-card" data-id="${recipeDoc.id}">
                                             <img src="${recipe.image}" class="card-img-top recipe-image" alt="Recipe Image">
                                             <div class="card-body">
                                                 <h5 class="recipe-title">${recipe.title}</h5>
@@ -113,7 +119,12 @@
                                             </div>
                                         </div>
                                     </div>`;
-                                savedRecipesContainer.innerHTML += recipeCard;
+                                savedRecipesContainer.insertAdjacentHTML('beforeend', recipeCardHTML);
+
+                                const recipeCard = savedRecipesContainer.querySelector(`.recipe-card[data-id="${recipeDoc.id}"]`);
+                                recipeCard.addEventListener("click", () => {
+                                    window.location.href = `recipeDetails.html?id=${recipeDoc.id}`;
+                                });
                             }
                         }).catch((error) => {
                             console.log("Error getting recipe details:", error);

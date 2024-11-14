@@ -99,9 +99,35 @@ li strong {
 }
 
 .recipe-header {
+  display: flex;
+  align-items: center;
   padding-left: 2%;
 }
 
 .row {
   align-items: baseline;
+}
+
+.back-button {
+  padding: 10px;
+  font-size: 15px;
+  font-weight: 800;
+  color: #ffffff;
+  background-color: #f4b400;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+  width: 15%;
+  font-family: 'Bebas Neue', sans-serif;
+  margin-left: 25%;
+  transition: all 0.3s ease;
+}
+
+.back-button:focus {
+  outline: none;
+}
+
+.back-button:hover {
+  background-color: #f77f00;
 }
