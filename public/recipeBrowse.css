@@ -112,6 +112,29 @@ body {
   color: #444;
 }
 
+.save-icon {
+  font-size: 30px;
+  cursor: pointer;
+  color: #999;
+  margin-left: 5px;
+  vertical-align: middle;
+  transition: color 0.3s ease;
+}
+
+.save-icon:hover {
+  color: #FF6347;
+  transform: scale(1.50);
+}
+
+.saved {
+  color: red;
+}
+
+.saved:hover {
+  color: #CC0000;
+  transform: scale(1.50);
+}
+
 @media (max-width: 768px) {
   .recipe-list {
       flex-direction: column;

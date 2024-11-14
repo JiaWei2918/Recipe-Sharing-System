@@ -106,31 +106,43 @@ body {
   color: #333;
 }
 
-.card {
-  border: none;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border-radius: 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  height: 100%;
-  width: 60%;
-}
-
-.card:hover {
-  transform: scale(1.05);
-  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-.card-title {
-  font-size: 1.1em;
-  font-weight: 500;
-}
-
 .container img.rounded-circle {
   border: 3px solid #007bff;
 }
 
 .d-flex .btn-primary {
   font-weight: 600;
+}
+
+.recipe-card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.recipe-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.recipe-image {
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 1px solid #ddd;
+}
+
+.recipe-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.recipe-timestamp {
+  color: #777;
+  font-size: 0.9rem;
 }
 
 #profileEdit textarea.profile-description {
