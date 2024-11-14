@@ -28,6 +28,7 @@
         import { db, collection, getDocs } from '/public/firebaseInit.js';
 
         const recipeList = document.getElementById("recipeList");
+        const searchInput = document.getElementById("searchInput");
 
         async function fetchRecipes() {
             try {
@@ -60,17 +61,19 @@
             }
         }
 
-        fetchRecipes();
-
-        document.getElementById("searchButton").addEventListener("click", () => {
-            const searchInput = document.getElementById("searchInput").value.toLowerCase();
+        function filterRecipes() {
+            const searchValue = searchInput.value.toLowerCase();
             const recipeCards = document.querySelectorAll(".recipe-card");
             recipeCards.forEach(card => {
                 const title = card.querySelector("h2").innerText.toLowerCase();
                 const ingredients = card.querySelector(".ingredients").innerText.toLowerCase();
-                card.style.display = title.includes(searchInput) || ingredients.includes(searchInput) ? "" : "none";
+                card.style.display = title.includes(searchValue) || ingredients.includes(searchValue) ? "" : "none";
             });
-        });
+        }
+
+        // Listen for input on the search box and filter recipes immediately on each character
+        searchInput.addEventListener("input", filterRecipes);
+        fetchRecipes();
     </script>
     <script type="module" src="public/sidebar.js"></script>
 </body>
