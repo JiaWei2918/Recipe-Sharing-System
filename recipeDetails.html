@@ -20,6 +20,7 @@
             <div class="row recipe-header">
                 <h1 id="recipeTitle">Recipe Title</h1>
                 <span id="saveRecipeIcon" class="save-icon">&#9825;</span>
+                <button class="back-button" onclick="history.back()">Go Back</button>
             </div>
             <p class="description" id="recipeDescription"> 
             </p>
@@ -46,7 +47,7 @@
     </div>
 
     <script type="module">
-        import { db, doc, getDoc, collection, addDoc, query, where, getDocs, auth } from '/public/firebaseInit.js';
+        import { db, doc, getDoc, collection, addDoc, query, where, getDocs, auth, deleteDoc } from '/public/firebaseInit.js';
 
         const urlParams = new URLSearchParams(window.location.search);
         const recipeId = urlParams.get('id');
@@ -149,11 +150,17 @@
                     saveRecipeIcon.title = "Recipe Saved";
                     saveRecipeIcon.innerHTML = "&#9829;";
                 } else {
-                    alert("Recipe is already saved.");
+                    const docRef = querySnapshot.docs[0];
+                    await deleteDoc(docRef.ref);
+
+                    alert("Recipe unsaved!");
+                    saveRecipeIcon.classList.remove('saved');
+                    saveRecipeIcon.title = "Recipe Unsaved";
+                    saveRecipeIcon.innerHTML = "&#9825;";
                 }
             } catch (error) {
-                console.error("Error saving recipe:", error);
-                alert("An error occurred while saving the recipe. Please try again.");
+                console.error("Error saving /unsaving recipe:", error);
+                alert("An error occurred while saving or unsaving the recipe. Please try again.");
             }
         }
 

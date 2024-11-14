@@ -27,6 +27,7 @@ body {
   border: none;
   border-radius: 4px;
   width: 80%;
+  outline: none;
 }
 
 .search-bar button {
