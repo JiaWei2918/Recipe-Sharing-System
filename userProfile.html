@@ -12,7 +12,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <script type="module">
-        import { auth, db, doc, collection, query, where, getDoc, getDocs, onAuthStateChanged, updateDoc } from "../public/firebaseInit.js";
+        import { auth, db, doc, collection, query, where, getDoc, getDocs, onAuthStateChanged, updateDoc } from "./public/firebaseInit.js";
 
         function loadUserProfile() {
             onAuthStateChanged(auth, (user) => {
@@ -26,7 +26,7 @@
                             const userData = docSnapshot.data();
 
                             document.getElementById('profile-title-text').innerText = `${userData.username}'s Recipe Box`;
-                            document.getElementById('profilePic').src = userData.photoURL || 'public/images/usernotlogin.JPG';
+                            document.getElementById('profilePic').src = userData.photoURL || './public/images/usernotlogin.JPG';
                             document.getElementById('profileDescription').innerText = userData.description || 'No Bio';
                             document.getElementById('xLink').innerText = userData.x || 'X';
                             document.getElementById('instagramLink').innerText = userData.instagram || 'Instagram';
@@ -233,7 +233,7 @@
         <div class="text-center mb-4">
             <h2 class="profile-title" id="profile-title">
                 <a href="#" id="goBackIcon">
-                    <img src="public/images/back.png" alt="Back" class="back-icon">
+                    <img src="./public/images/back.png" alt="Back" class="back-icon">
                 </a>
                 <span id="profile-title-text">User's Recipe Box</span>
                 <i class="fas fa-edit" id="edit-icon" style="cursor: pointer;"></i>
@@ -267,21 +267,21 @@
 
                         <div id="photoGallery" class="photo-gallery">
                             <p>Select a profile picture:</p>
-                            <img src="account-photo/p1.jpg" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p1.jpg')">
-                            <img src="account-photo/p2.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p2.png')">
-                            <img src="account-photo/p3.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p3.png')">
-                            <img src="account-photo/p4.jpg" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p4.jpg')">
-                            <img src="account-photo/p5.jpg" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p5.jpg')">
-                            <img src="account-photo/p6.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p6.png')">
-                            <img src="account-photo/p7.jpg" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p7.jpg')">
-                            <img src="account-photo/p8.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p8.png')">
-                            <img src="account-photo/p9.jpg" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p9.jpg')">
-                            <img src="account-photo/p10.jpg" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p10.jpg')">
-                            <img src="account-photo/p11.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p11.png')">
-                            <img src="account-photo/p12.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p12.png')">
-                            <img src="account-photo/p13.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p13.png')">
-                            <img src="account-photo/p14.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p14.png')">
-                            <img src="account-photo/p15.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p15.png')">
+                            <img src="./account-photo/p1.jpg" alt="Profile Option" class="profile-option" onclick="selectPhoto('./account-photo/p1.jpg')">
+                            <img src="./account-photo/p2.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('./account-photo/p2.png')">
+                            <img src="./account-photo/p3.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('./account-photo/p3.png')">
+                            <img src="./account-photo/p4.jpg" alt="Profile Option" class="profile-option" onclick="selectPhoto('./account-photo/p4.jpg')">
+                            <img src="./account-photo/p5.jpg" alt="Profile Option" class="profile-option" onclick="selectPhoto('./account-photo/p5.jpg')">
+                            <img src="./account-photo/p6.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('./account-photo/p6.png')">
+                            <img src="./account-photo/p7.jpg" alt="Profile Option" class="profile-option" onclick="selectPhoto('./account-photo/p7.jpg')">
+                            <img src="./account-photo/p8.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('./account-photo/p8.png')">
+                            <img src="./account-photo/p9.jpg" alt="Profile Option" class="profile-option" onclick="selectPhoto('./account-photo/p9.jpg')">
+                            <img src="./account-photo/p10.jpg" alt="Profile Option" class="profile-option" onclick="selectPhoto('./account-photo/p10.jpg')">
+                            <img src="./account-photo/p11.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('./account-photo/p11.png')">
+                            <img src="./account-photo/p12.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('./account-photo/p12.png')">
+                            <img src="./account-photo/p13.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('./account-photo/p13.png')">
+                            <img src="./account-photo/p14.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('./account-photo/p14.png')">
+                            <img src="./account-photo/p15.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('./account-photo/p15.png')">
                         </div>
                     </div>
                     <div class="col-md-9">
