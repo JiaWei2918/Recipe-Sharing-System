@@ -143,16 +143,35 @@
         function filterRecipes() {
             const searchValue = searchInput.value.toLowerCase();
             const recipeCards = document.querySelectorAll(".recipe-card");
+            let hasMatch = false;
 
             recipeCards.forEach(card => {
                 const title = card.querySelector("h2").innerText.toLowerCase();
                 const ingredients = card.querySelector(".ingredients").innerText.toLowerCase();
-                card.style.display = title.includes(searchValue) || ingredients.includes(searchValue) ? "" : "none";
+                if (title.includes(searchValue) || ingredients.includes(searchValue)) {
+                    card.style.display = "";
+                    hasMatch = true;
+                } else {
+                    card.style.display = "none";
+                }
             });
+
+            const noMatchMessage = document.getElementById("noMatchMessage");
+            if (!hasMatch) {
+                if (!noMatchMessage) {
+                    const message = document.createElement("p");
+                    message.id = "noMatchMessage";
+                    message.textContent = 'No recipes found matching your search.';
+                    message.style.textAlign = "center";
+                    recipeList.appendChild(message);
+                }
+            } else if (noMatchMessage) {
+                noMatchMessage.remove();
+            }
         }
 
-        searchInput.addEventListener("input", filterRecipes);
-        fetchRecipes();
+    searchInput.addEventListener("input", filterRecipes);
+    fetchRecipes();
     </script>
     <script type="module" src="public/sidebar.js"></script>
 </body>
