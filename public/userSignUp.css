@@ -261,3 +261,68 @@ body {
 #customAlert.success {
   background-color: #4CAF50;
 }
+
+@media (max-width: 768px) {
+  .signup-container {
+    padding: 20px 0;
+    justify-content: center;
+  }
+
+  .signup-box {
+    min-width: 100%;
+    padding: 15px;
+    margin: 0 20px;
+    box-shadow: none;
+  }
+
+  .signup-box h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+  }
+
+  .signup-box label {
+    font-size: 24px;
+  }
+
+  .signup-box input[type="text"],
+  .signup-box input[type="email"],
+  .signup-box input[type="password"] {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .signup-box button {
+    padding: 10px;
+    font-size: 18px;
+  }
+
+  .photo-selection-content {
+    max-width: 90%;
+  }
+
+  .photo-selection-grid img {
+    height: 80px;
+  }
+
+  .preview {
+    width: 70px;
+    height: 70px;
+  }
+
+  .terms label, .signup-box .redirect-text {
+    font-size: 12px;
+  }
+
+  .scroll-to-top {
+    width: 45px;
+    height: 45px;
+    bottom: 15px;
+    right: 15px;
+  }
+
+  #customAlert {
+    width: 90%;
+    font-size: 14px;
+    padding: 15px;
+  }
+}
