@@ -39,13 +39,10 @@
                         }, 2000);
                     }, 1500); 
                 } catch (e) {
-                    console.error("Firebase Authentication Error: ", e);
-                    if (e.code === 'auth/user-not-found') {
-                        alertBox.textContent = "No user found with this email. Please sign up first.";
-                    } else if (e.code === 'auth/wrong-password') {
-                        alertBox.textContent = "Incorrect password. Please try again.";
+                    if (e.code === 'auth/invalid-login-credentials') {
+                        alertBox.textContent = "No user found with this email or email or password enter wrongly. Please try again";
                     } else {
-                        alertBox.textContent = "An error occurred. Please try again later.";
+                        alertBox.textContent = "An unknown error occurred. Please try again later.";
                     }
 
                     alertBox.className = "error";

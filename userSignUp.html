@@ -72,17 +72,23 @@
         const termsAccepted = document.getElementById('terms').checked;
 
         if (password !== confirmPassword) {
-          alert("Passwords do not match. Please try again.");
+          alertBox.textContent = "Passwords do not match. Please try again.";
+          alertBox.className = "error";
+          alertBox.style.display = 'block';
           return;
         }
 
         if (!termsAccepted) {
-          alert("You must accept the Terms & Conditions to sign up.");
+          alertBox.textContent = "You must accept the Terms & Conditions to sign up.";
+          alertBox.className = "error";
+          alertBox.style.display = 'block';
           return;
         }
 
         if (!selectedPhotoPath) {
-          alert("Please select a profile photo.");
+          alertBox.textContent = "Please select a profile photo.";
+          alertBox.className = "error";
+          alertBox.style.display = 'block';
           return;
         }
 
