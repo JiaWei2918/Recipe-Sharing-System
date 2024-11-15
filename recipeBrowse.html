@@ -162,6 +162,7 @@
                     const message = document.createElement("p");
                     message.id = "noMatchMessage";
                     message.textContent = 'No recipes found matching your search.';
+                    message.style.textAlign = "center";
                     recipeList.appendChild(message);
                 }
             } else if (noMatchMessage) {
