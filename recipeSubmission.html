@@ -93,14 +93,8 @@
 
         auth.onAuthStateChanged(user => {
             if (!user) {
-                alertBox.style.display = "block";
-                alertBox.innerHTML = "Only logged-in users can submit recipes.";
-
-                setTimeout(() => {
-                    window.location.href = "userLogin.html";
-                }, 2000);
-            } else {
-                alertBox.style.display = "none";
+                alert("Only logged-in users can submit recipes.");
+                window.location.href = "userLogin.html";
             }
         });
     
