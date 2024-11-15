@@ -136,6 +136,12 @@ body {
   transform: scale(1.50);
 }
 
+#noMatchMessage {
+  text-align: center;
+  margin: 0 600px 0 490px;
+  width: fit-content;
+}
+
 @media (max-width: 768px) {
   .recipe-list {
       flex-direction: column;
