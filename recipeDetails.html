@@ -44,6 +44,26 @@
                 <ol id="stepsList"></ol>
             </div>
         </div>
+
+        <div class="review-section">
+            <h2>Reviews and Ratings</h2> 
+        
+            <form id="reviewForm">
+                <textarea id="reviewText" placeholder="Share your thoughts about this recipe..." required></textarea>
+                <div class="star-rating">
+                    <span data-rating="1">&#9733;</span>
+                    <span data-rating="2">&#9733;</span>
+                    <span data-rating="3">&#9733;</span>
+                    <span data-rating="4">&#9733;</span>
+                    <span data-rating="5">&#9733;</span>
+                </div>
+                <button type="submit">Submit Review</button>
+            </form>
+
+            <h2>Comments:</h2>
+            <div id="reviewsList"></div>
+            <button id="viewMoreBtn">View more...</button>
+        </div>  
     </div>
 
     <script type="module">
@@ -172,8 +192,202 @@
             console.error("No recipe ID provided in URL");
             alert("Invalid recipe ID. Please check the link and try again.");
         }
-    </script>
 
-    <script type="module" src="public/sidebar.js"></script>
+        // async function getUsername(uid) {
+        //     const usersRef = collection(db, 'users');
+        //     const q = query(usersRef, where('uid', '==', uid));
+        //     const querySnapshot = await getDocs(q);
+
+        //     if (!querySnapshot.empty) {
+        //         const userData = querySnapshot.docs[0].data();
+        //         return userData.username || 'Anonymous'; 
+        //     } else {
+        //         return 'Anonymous';
+        //     }
+        // }
+
+        async function getUsername(userId) {
+            try {
+                // Replace 'users' with the collection name where user details are stored
+                const userRef = doc(db, 'users', userId); 
+                const userDoc = await getDoc(userRef);
+
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    return userData.username || userData.name || 'Anonymous'; 
+                    // Use 'username' or 'name' from the user document, fallback to 'Anonymous'
+                } else {
+                    console.warn(`No user found for ID: ${userId}`);
+                    return 'Anonymous'; // Fallback if no user data exists
+                }
+            } catch (error) {
+                console.error(`Error fetching username for user ID ${userId}:`, error);
+                return 'Anonymous'; // Fallback in case of errors
+            }
+        }
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+        const reviewForm = document.getElementById('reviewForm');
+        const reviewText = document.getElementById('reviewText');
+        const reviewsList = document.getElementById('reviewsList');
+        const starRating = document.querySelector('.star-rating');
+        const viewMoreBtn = document.getElementById('viewMoreBtn');
+        let selectedRating = 0;
+        let reviews = [];
+        let currentPage = 1;
+        const reviewsLimit = 10;
+
+        // Handle star rating selection
+        starRating.addEventListener('click', (event) => {
+            if (event.target.tagName === 'SPAN' && event.target.hasAttribute('data-rating')) {
+                selectedRating = parseInt(event.target.getAttribute('data-rating'));
+                // Highlight the selected stars
+                Array.from(starRating.children).forEach((star, index) => {
+                    star.style.color = index < selectedRating ? 'gold' : '#ccc';
+                });
+            }
+        });
+
+        async function fetchReviews(recipeId) {
+            try {
+                const reviewsRef = collection(db, 'reviews');
+                const q = query(reviewsRef, where('recipe_id', '==', recipeId));
+                const querySnapshot = await getDocs(q);
+
+                reviews = []; // Clear previous reviews
+                for (const doc of querySnapshot.docs) {
+                const review = doc.data();
+                if (review.created_at && typeof review.created_at.toDate === 'function') {
+                    review.created_at = review.created_at.toDate(); // Convert Firestore Timestamp to Date
+                } else {
+                    review.created_at = new Date(); // Fallback for invalid or missing dates
+                }
+
+                // Fetch the username based on user_id
+                review.user_name = await getUsername(review.user_id); 
+                reviews.push(review);
+            }
+
+                // Sort reviews by date (newest first)
+                reviews.sort((a, b) => b.created_at - a.created_at);
+
+                currentPage = 1; // Reset to the first page
+                displayReviews(); // Display the initial set of reviews
+            } catch (error) {
+                console.error('Error fetching reviews:', error);
+                alert('An error occurred while loading reviews. Please try again later.');
+            }
+        }
+
+        // Display reviews with pagination
+        function displayReviews(append = false) {
+            if (!append) {
+                reviewsList.innerHTML = ''; // Clear existing reviews only if not appending
+            }
+            const start = (currentPage - 1) * reviewsLimit;
+            const end = start + reviewsLimit;
+            const reviewsToShow = reviews.slice(start, end);
+
+            reviewsToShow.forEach(review => {
+                const reviewElement = document.createElement('div');
+                reviewElement.className = 'review-item';
+
+                const stars = '★'.repeat(review.rating).split('').map(star => `<span class="star">${star}</span>`).join('');
+                const emptyStars = '☆'.repeat(5 - review.rating).split('').map(star => `<span>${star}</span>`).join('');
+
+                const reviewDate = review.created_at instanceof Date ? review.created_at.toLocaleString() : 'Date not available';
+
+                reviewElement.innerHTML = `
+                    <p><strong>${review.user_name || 'Anonymous'}:</strong> 
+                        ${stars}${emptyStars}
+                    </p>
+                    <p>${review.text}</p>
+                    <p><small>Submitted on: ${reviewDate}</small></p>
+                `;
+                reviewsList.appendChild(reviewElement);
+            });
+
+            // Show the "View more..." button if there are more reviews
+            if (reviews.length > currentPage * reviewsLimit) {
+                viewMoreBtn.style.display = 'block';
+            } else {
+                viewMoreBtn.style.display = 'none';
+            }
+        }
+
+        // Handle form submission
+        reviewForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const user = auth.currentUser;
+            if (!user) {
+                alert('Please log in to submit a review.');
+                return;
+            }
+
+            if (!selectedRating) {
+                alert('Please select a rating before submitting your review.');
+                return;
+            }
+
+            if (!recipeId) {
+                alert('Recipe ID not found. Please try again.');
+                return;
+            }
+
+            const reviewTextValue = reviewText.value.trim();
+            if (!reviewTextValue) {
+                alert('Review text cannot be empty.');
+                return;
+            }
+
+            try {
+                const review = {
+                    recipe_id: recipeId,
+                    user_id: user.uid,
+                    user_name: user.displayName || 'Anonymous',
+                    text: reviewTextValue,
+                    rating: selectedRating,
+                    created_at: new Date(),
+                };
+
+                await addDoc(collection(db, 'reviews'), review);
+
+                alert('Review submitted successfully!');
+                reviewText.value = '';
+                selectedRating = 0;
+
+                // Clear star selection
+                const stars = starRating.querySelectorAll('span');
+                stars.forEach((star) => star.classList.remove('selected'));
+
+                // Add the new review to the top
+                reviews.unshift(review);
+                displayReviews(); // Refresh reviews display
+            } catch (error) {
+                console.error('Error submitting review:', error);
+                alert('An error occurred while submitting your review. Please try again later.');
+            }
+        });
+
+        // Handle "View more..." button click
+        viewMoreBtn.addEventListener('click', () => {
+            currentPage++;
+            displayReviews(true);
+    
+            // Hide the "View more..." button after clicking
+            viewMoreBtn.style.display = 'none';
+        });
+
+        // Fetch reviews when the page loads
+        if (recipeId) {
+            fetchReviews(recipeId);
+        }
+    });
+        </script>
+
+        <script type="module" src="public/sidebar.js"></script>
+
 </body>
 </html>
