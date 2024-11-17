@@ -40,10 +40,12 @@
 
                 recipeList.innerHTML = '';
 
-                querySnapshot.forEach((doc) => {
+                for (const doc of querySnapshot.docs) {
                     const recipe = doc.data();
                     const recipeCard = document.createElement("div");
                     recipeCard.classList.add("recipe-card");
+
+                    const averageRating = await calculateAverageRating(doc.id);
 
                     recipeCard.innerHTML = `
                         <img src="${recipe.image}" alt="${recipe.title}">
@@ -53,7 +55,7 @@
                             </h2>
                             <p class="category">${recipe.category}</p>
                             <p class="source">From: ${recipe.source}</p>
-                            <div class="rating">Rating: ★★★★★</div>
+                            <div class="rating">Rating: ${averageRating}</div>
                             <p class="ingredients">${recipe.ingredients.length} Ingredients</p>
                         </div>
                     `;
@@ -71,10 +73,39 @@
                     });
 
                     recipeList.appendChild(recipeCard);
-                });
+                }
             } catch (error) {
                 console.error("Error fetching recipes:", error);
                 recipeList.innerHTML = '<p>There was an issue fetching the recipes. Please try again later.</p>';
+            }
+        }
+
+        async function calculateAverageRating(recipeId) {
+            try {
+                const reviewsRef = collection(db, "reviews");
+                const q = query(reviewsRef, where("recipe_id", "==", recipeId));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    return "No reviews yet";
+                }
+
+                let totalRating = 0;
+                let reviewCount = 0;
+
+                querySnapshot.forEach((reviewDoc) => {
+                    const review = reviewDoc.data();
+                    totalRating += review.rating;
+                    reviewCount++;
+                });
+
+                const averageRating = (totalRating / reviewCount).toFixed(1);
+                const stars = "★".repeat(averageRating) + "☆".repeat(5 - averageRating);
+
+                return stars;
+            } catch (error) {
+                console.error("Error calculating average rating:", error);
+                return "Error";
             }
         }
 
