@@ -94,13 +94,14 @@
                 let reviewCount = 0;
 
                 querySnapshot.forEach((reviewDoc) => {
-                    const review = reviewDoc.data();
-                    totalRating += review.rating;
+                    const { rating, maxRating = 5 } = reviewDoc.data(); 
+                    totalRating += (rating / maxRating) * 5;
                     reviewCount++;
                 });
 
                 const averageRating = (totalRating / reviewCount).toFixed(1);
-                const stars = "★".repeat(averageRating) + "☆".repeat(5 - averageRating);
+                const fullStars = Math.round(averageRating);
+                const stars = "★".repeat(fullStars) + "☆".repeat(5 - fullStars);
 
                 return stars;
             } catch (error) {
