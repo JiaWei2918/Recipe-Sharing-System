@@ -134,7 +134,7 @@ li strong {
 }
 
 .review-section, #reviewsList {
-  background-color: #f9f9f9; /* Use the same light gray background */
+  background-color: #f9f9f9; 
   padding: 15px;
   border-radius: 5px;
   margin-top: 20px;
@@ -187,7 +187,7 @@ li strong {
 
 .review-item .star {
   color: gold;
-  font-size: 18px; /* Optional: adjust size if needed */
+  font-size: 18px; 
 }
 
 #viewMoreBtn {
@@ -202,5 +202,5 @@ li strong {
 
 #viewMoreBtn:hover {
   background-color: #cc4e31;
-  transform: scale(1.1); /* Slightly increase size on hover */
+  transform: scale(1.1); 
 }

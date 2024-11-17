@@ -18,9 +18,6 @@
                 <label for="title">Recipe Title:</label>
                 <input type="text" id="title" name="title" required>
 
-                <label for="description">Description</label>
-                <input type="text" id="description" name="description" required>
-
                 <label for="category">Category:</label>
                 <div class="custom-select">
                     <select id="category" name="category" required>
@@ -75,6 +72,8 @@
                     <img src="./public/images/friedRice.jpg" alt="friedRice.jpg">
                     <img src="./public/images/Cheesy-Garlic-Breadsticks.jpg" alt="Cheesy-Garlic-Breadsticks.jpg">
                     <img src="./public/images/Classic-Potato-Salad.jpg" alt="Classic-Potato-Salad.jpg">
+                    <img src="./public/images/spaghettiCarbonara.jpeg" alt="spaghettiCarbonara.jpeg">
+                    <img src="./public/images/ramen.jpg" alt="ramen.jpg">
                 </div>
             </div>
         </div>
@@ -140,7 +139,6 @@
             const formData = {
                 userId: user.uid,
                 title: recipeForm.title.value,
-                description: recipeForm.description.value,
                 category: recipeForm.category.value,
                 source: recipeForm.source.value,
                 ingredients: recipeForm.ingredients.value.split("\n"),
