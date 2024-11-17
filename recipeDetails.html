@@ -249,7 +249,7 @@
                     });
 
                     // 从数据库获取符合条件的评论
-                    await fetchReviews(selectedRating);
+                    await fetchReview(selectedRating);
                     displayReviews();
                 }
             });
@@ -284,7 +284,7 @@
                 }
             }
 
-            async function fetchReviews(selectedRating = null) {
+            async function fetchReview(selectedRating = null) {
                 try {
                     const reviewsRef = collection(db, 'reviews');
                     let q;
@@ -353,29 +353,6 @@
                 } else {
                     viewMoreBtn.style.display = 'none';
                 }
-            }
-
-            function displayReview(append = false) {
-                if (!append) {
-                    reviewsList.innerHTML = ''; 
-                }
-                const reviewElement = document.createElement('div');
-                reviewElement.className = 'review-item';
-
-                const stars = '★'.repeat(review.rating).split('').map(star => `<span class="star">${star}</span>`).join('');
-                const emptyStars = '☆'.repeat(5 - review.rating).split('').map(star => `<span>${star}</span>`).join('');
-
-                const reviewDate = review.created_at instanceof Date ? review.created_at.toLocaleString() : 'Date not available';
-
-                reviewElement.innerHTML = `
-                    <p><strong>${review.user_name || 'Anonymous'}:</strong> 
-                        ${stars}${emptyStars}
-                    </p>
-                    <p>${review.text}</p>
-                    <p><small>Submitted on: ${reviewDate}</small></p>
-                `;
-
-                reviewsList.appendChild(reviewElement);
             }
 
             reviewForm.addEventListener('submit', async (event) => {
