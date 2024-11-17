@@ -22,11 +22,11 @@ document.addEventListener("DOMContentLoaded", function () {
                             const querySnapshot = await getDocs(q);
                             if (!querySnapshot.empty) {
                                 const userData = querySnapshot.docs[0].data();
-                                const photoURL = userData.photoURL || "public/images/usernotlogin.JPG";
+                                const photoURL = userData.photoURL || "./public/images/usernotlogin.JPG";
                                 profileImage.src = photoURL;
                             } else {
                                 console.log("No matching user document found.");
-                                profileImage.src = "public/images/usernotlogin.JPG";
+                                profileImage.src = "./public/images/usernotlogin.JPG";
                             }
 
                             profileLink.style.display = "block";
@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             alert("An error occurred while retrieving your profile information. Please try again later.");
                         }
                     } else {
-                        profileImage.src = "public/images/usernotlogin.JPG";
+                        profileImage.src = "./public/images/usernotlogin.JPG";
                         profileLink.style.display = "none";
                         logoutLink.style.display = "none";
                         loginLink.style.display = "block";

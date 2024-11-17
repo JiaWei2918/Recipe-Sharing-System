@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="public/sidebar.css">
 
   <script type="module">
-    import { app, auth, createUserWithEmailAndPassword, db, collection, addDoc, serverTimestamp } from "/public/firebaseInit.js";
+    import { app, auth, createUserWithEmailAndPassword, db, collection, addDoc, serverTimestamp } from "./public/firebaseInit.js";
 
     document.addEventListener('DOMContentLoaded', function () {
       const signupForm = document.getElementById('signupForm');
@@ -25,21 +25,21 @@
       let selectedPhotoPath = "";
 
       const photos = [
-        "account-photo/p1.jpg",
-        "account-photo/p2.png",
-        "account-photo/p3.png",
-        "account-photo/p4.jpg",
-        "account-photo/p5.jpg",
-        "account-photo/p6.png",
-        "account-photo/p7.jpg",
-        "account-photo/p8.png",
-        "account-photo/p9.jpg",
-        "account-photo/p10.jpg",
-        "account-photo/p11.png",
-        "account-photo/p12.png",
-        "account-photo/p13.png",
-        "account-photo/p14.png",
-        "account-photo/p15.png"
+        "./account-photo/p1.jpg",
+        "./account-photo/p2.png",
+        "./account-photo/p3.png",
+        "./account-photo/p4.jpg",
+        "./account-photo/p5.jpg",
+        "./account-photo/p6.png",
+        "./account-photo/p7.jpg",
+        "./account-photo/p8.png",
+        "./account-photo/p9.jpg",
+        "./account-photo/p10.jpg",
+        "./account-photo/p11.png",
+        "./account-photo/p12.png",
+        "./account-photo/p13.png",
+        "./account-photo/p14.png",
+        "./account-photo/p15.png"
       ];
 
       photos.forEach(photo => {

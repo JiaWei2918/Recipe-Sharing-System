@@ -12,7 +12,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <script type="module">
-        import { auth, db, doc, collection, query, where, getDoc, getDocs, onAuthStateChanged, updateDoc } from "/public/firebaseInit.js";
+        import { auth, db, doc, collection, query, where, getDoc, getDocs, onAuthStateChanged, updateDoc } from "./public/firebaseInit.js";
 
         function loadUserProfile() {
             onAuthStateChanged(auth, (user) => {
@@ -26,11 +26,19 @@
                             const userData = docSnapshot.data();
 
                             document.getElementById('profile-title-text').innerText = `${userData.username}'s Recipe Box`;
-                            document.getElementById('profilePic').src = userData.photoURL || 'public/images/usernotlogin.JPG';
+                            document.getElementById('profilePic').src = userData.photoURL || './public/images/usernotlogin.JPG';
                             document.getElementById('profileDescription').innerText = userData.description || 'No Bio';
                             document.getElementById('xLink').innerText = userData.x || 'X';
                             document.getElementById('instagramLink').innerText = userData.instagram || 'Instagram';
                             document.getElementById('pinterestLink').innerText = userData.pinterest || 'Pinterest';
+
+                            document.getElementById('editProfileDescription').value = userData.description || 'No Bio';
+                            document.getElementById('x').value = userData.x || '';
+                            document.getElementById('instagram').value = userData.instagram || '';
+                            document.getElementById('pinterest').value = userData.pinterest || '';
+                            document.getElementById('profilePicInput').value = userData.photoURL || '';
+
+                            document.getElementById('editProfilePic').src = userData.photoURL || './public/images/usernotlogin.JPG';
                         } else {
                             console.log("User does not exist.");
                             alert("Error: User profile not found. Please try again later.");
@@ -141,17 +149,18 @@
         function toggleEditMode() {
             const profileView = document.getElementById('profileView');
             const profileEdit = document.getElementById('profileEdit');
+
             if (profileView.style.display === 'none') {
                 profileView.style.display = 'block';
                 profileEdit.style.display = 'none';
             } else {
-                const currentProfilePic = document.getElementById('profilePic').src;
-                document.getElementById('editProfilePic').src = currentProfilePic;
-                document.getElementById('profilePicInput').value = currentProfilePic;
-                
                 profileView.style.display = 'none';
                 profileEdit.style.display = 'block';
+
+                loadUserProfile();
             }
+
+            document.getElementById('photoGalleryContainer').style.display = 'none'; 
         }
 
         async function saveProfile() {
@@ -215,6 +224,7 @@
 
             document.getElementById('edit-icon').addEventListener('click', toggleEditMode);
             document.getElementById('cancelButton').addEventListener('click', toggleEditMode);
+            document.getElementById('closephotobtn').addEventListener('click', hidePhotoSelector);
             document.getElementById('saveProfile').addEventListener('click', saveProfile);
             document.getElementById('downloadProfile').addEventListener('click', downloadProfile);
             document.getElementById('goBackIcon').addEventListener('click', goBack);
@@ -222,9 +232,21 @@
     </script>
 
     <script>
+        function showPhotoSelector() {
+            const photoGalleryContainer = document.getElementById('photoGalleryContainer');
+            if (photoGalleryContainer.style.display === 'none') {
+                photoGalleryContainer.style.display = 'block';
+            }
+        }
+
+        function hidePhotoSelector() {
+            document.getElementById('photoGalleryContainer').style.display = 'none';
+        }
+        
         function selectPhoto(photoPath) {
             document.getElementById('editProfilePic').src = photoPath;
             document.getElementById('profilePicInput').value = photoPath;
+            hidePhotoSelector();
         }
     </script>
 </head>
@@ -233,7 +255,7 @@
         <div class="text-center mb-4">
             <h2 class="profile-title" id="profile-title">
                 <a href="#" id="goBackIcon">
-                    <img src="public/images/back.png" alt="Back" class="back-icon">
+                    <img src="./public/images/back.png" alt="Back" class="back-icon">
                 </a>
                 <span id="profile-title-text">User's Recipe Box</span>
                 <i class="fas fa-edit" id="edit-icon" style="cursor: pointer;"></i>
@@ -261,29 +283,12 @@
         <div id="profileEdit" style="display: none;">
             <form>
                 <div class="row align-items-center">
-                    <div class="col-md-3 text-center">
+                    <div class="col-md-3 text-center editProfile-container">
                         <img id="editProfilePic" class="rounded-circle mb-3" alt="Profile Picture" width="120" height="120">
                         <input type="hidden" id="profilePicInput">
-
-                        <div id="photoGallery" class="photo-gallery">
-                            <p>Select a profile picture:</p>
-                            <img src="account-photo/p1.jpg" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p1.jpg')">
-                            <img src="account-photo/p2.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p2.png')">
-                            <img src="account-photo/p3.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p3.png')">
-                            <img src="account-photo/p4.jpg" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p4.jpg')">
-                            <img src="account-photo/p5.jpg" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p5.jpg')">
-                            <img src="account-photo/p6.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p6.png')">
-                            <img src="account-photo/p7.jpg" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p7.jpg')">
-                            <img src="account-photo/p8.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p8.png')">
-                            <img src="account-photo/p9.jpg" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p9.jpg')">
-                            <img src="account-photo/p10.jpg" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p10.jpg')">
-                            <img src="account-photo/p11.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p11.png')">
-                            <img src="account-photo/p12.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p12.png')">
-                            <img src="account-photo/p13.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p13.png')">
-                            <img src="account-photo/p14.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p14.png')">
-                            <img src="account-photo/p15.png" alt="Profile Option" class="profile-option" onclick="selectPhoto('account-photo/p15.png')">
-                        </div>
+                        <button type="button" id="changePhotoBtn" onclick="showPhotoSelector()" class="btn btn-secondary">Change Photo</button>
                     </div>
+
                     <div class="col-md-9">
                         <textarea id="editProfileDescription" class="form-control profile-description" rows="5">No Bio.</textarea>
                         <div class="d-flex flex-column align-items-start mt-3">
@@ -301,6 +306,29 @@
                 <div class="text-center mt-3">
                     <button type="button" class="btn btn-primary" id="saveProfile">Save Changes</button>
                     <button type="button" class="btn btn-secondary" id="cancelButton">Cancel</button>
+                </div>
+
+                <div id="photoGalleryContainer" style="display: none;">
+                    <div class="overlay" id="overlay" id="closephotobtn"></div>
+                    <div class="profile-option">
+                        <p>Select a profile picture:</p>
+                        <img src="./account-photo/p1.jpg" alt="Profile Option" onclick="selectPhoto('./account-photo/p1.jpg')">
+                        <img src="./account-photo/p2.png" alt="Profile Option" onclick="selectPhoto('./account-photo/p2.png')">
+                        <img src="./account-photo/p3.png" alt="Profile Option" onclick="selectPhoto('./account-photo/p3.png')">
+                        <img src="./account-photo/p4.jpg" alt="Profile Option" onclick="selectPhoto('./account-photo/p4.jpg')">
+                        <img src="./account-photo/p5.jpg" alt="Profile Option" onclick="selectPhoto('./account-photo/p5.jpg')">
+                        <img src="./account-photo/p6.png" alt="Profile Option" onclick="selectPhoto('./account-photo/p6.png')">
+                        <img src="./account-photo/p7.jpg" alt="Profile Option" onclick="selectPhoto('./account-photo/p7.jpg')">
+                        <img src="./account-photo/p8.png" alt="Profile Option" onclick="selectPhoto('./account-photo/p8.png')">
+                        <img src="./account-photo/p9.jpg" alt="Profile Option" onclick="selectPhoto('./account-photo/p9.jpg')">
+                        <img src="./account-photo/p10.jpg" alt="Profile Option" onclick="selectPhoto('./account-photo/p10.jpg')">
+                        <img src="./account-photo/p11.png" alt="Profile Option" onclick="selectPhoto('./account-photo/p11.png')">
+                        <img src="./account-photo/p12.png" alt="Profile Option" onclick="selectPhoto('./account-photo/p12.png')">
+                        <img src="./account-photo/p13.png" alt="Profile Option" onclick="selectPhoto('./account-photo/p13.png')">
+                        <img src="./account-photo/p14.png" alt="Profile Option" onclick="selectPhoto('./account-photo/p14.png')">
+                        <img src="./account-photo/p15.png" alt="Profile Option" onclick="selectPhoto('./account-photo/p15.png')">
+                        <button class="btn btn-danger mt-3" id="closephotobtn" onclick="hidePhotoSelector()">Close</button>
+                    </div>
                 </div>
             </form>
         </div>
