@@ -183,3 +183,19 @@ button[type="submit"]:hover {
   z-index: 1000;
   text-align: center;
 }
+
+#chooseImageButton {
+  background-color: orange;
+  color: white;
+  font-size: 1em;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+#chooseImageButton:hover {
+  background-color: #ff8c00;
+}
