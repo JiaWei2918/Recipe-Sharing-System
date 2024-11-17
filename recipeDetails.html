@@ -243,12 +243,10 @@
                 if (event.target.tagName === 'SPAN' && event.target.hasAttribute('data-rating')) {
                     const selectedRating = parseInt(event.target.getAttribute('data-rating'));
 
-                    // 更新星星样式
                     Array.from(searchRatingStars.children).forEach((star, index) => {
                         star.style.color = index < selectedRating ? 'gold' : '#ccc';
                     });
 
-                    // 从数据库获取符合条件的评论
                     await fetchReview(selectedRating);
                     displayReviews();
                 }
@@ -290,14 +288,12 @@
                     let q;
 
                     if (selectedRating !== null) {
-                        // 基于星级筛选
                         q = query(
                             reviewsRef,
                             where('recipe_id', '==', recipeId),
-                            where('rating', '==', selectedRating) // 添加星级条件
+                            where('rating', '==', selectedRating) 
                         );
                     } else {
-                        // 不筛选星级
                         q = query(reviewsRef, where('recipe_id', '==', recipeId));
                     }
 
@@ -422,7 +418,6 @@
             }
         });
 
-            // Show or hide "View more" button based on remaining reviews
             if (filteredReviews.length > currentPage * reviewsLimit) {
                 viewMoreBtn.style.display = 'block';
             } else {
