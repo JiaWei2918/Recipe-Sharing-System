@@ -67,7 +67,7 @@
     </div>
 
     <script type="module">
-        import { db, doc, getDoc, collection, addDoc, query, where, getDocs, auth, deleteDoc } from '/public/firebaseInit.js';
+        import { db, doc, getDoc, collection, addDoc, query, where, getDocs, auth, deleteDoc, analytics, logEvent } from '/public/firebaseInit.js';
 
         const urlParams = new URLSearchParams(window.location.search);
         const recipeId = urlParams.get('id');
@@ -225,8 +225,8 @@
                     Array.from(starRating.children).forEach((star, index) => {
                         star.style.color = index < selectedRating ? 'gold' : '#ccc';
                     });
-               }
-            });
+                }
+            });
 
             async function fetchReviews(recipeId) {
                 try {
@@ -373,9 +373,8 @@
     
         });
 
-        </script>
+    </script>
 
-        <script type="module" src="public/sidebar.js"></script>
-
+    <script type="module" src="public/sidebar.js"></script>
 </body>
 </html>

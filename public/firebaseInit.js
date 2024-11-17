@@ -18,4 +18,4 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const analytics = getAnalytics(app);
 
-export { app, auth, db, doc, getDocs, collection, query, where, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, addDoc, deleteDoc, serverTimestamp, sendPasswordResetEmail, getDoc, updateDoc };
+export { app, auth, db, doc, getDocs, collection, query, where, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, addDoc, deleteDoc, serverTimestamp, sendPasswordResetEmail, getDoc, updateDoc, analytics, logEvent };
